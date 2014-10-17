@@ -1,7 +1,11 @@
 # depslib dependency file v1.0
-1413562992 source:c:\users\chris\documents\slither\slitherai\main.cpp
+1413587048 source:c:\users\chris\documents\slither\slitherai\main.cpp
 	<iostream>
+	<fstream>
+	<string>
 	<Square.h>
+	<ArrayList.h>
+	<Board.h>
 
 1413560979 c:\users\chris\documents\slither\slitherai\include\square.h
 	<string>
@@ -14,4 +18,8 @@
 	"ArrayList.h"
 
 1413584570 c:\users\chris\documents\slither\slitherai\include\arraylist.h
+
+1413587115 c:\users\chris\documents\slither\slitherai\include\board.h
+	<ArrayList.h>
+	<Square.h>
 

@@ -5,11 +5,11 @@
 class Board
 {
     public:
-        Board(int width);
+        Board(int width, int height, ArrayList<Square> squares);
         virtual ~Board();
         int getWidth(){ return width;}
         int getHeight(){ return height;}
-        ArrayList<Square> squares = ArrayList();
+        ArrayList<Square> squares;
     protected:
         void drawBoard();
     private:

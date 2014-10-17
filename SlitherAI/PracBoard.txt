@@ -1,6 +1,5 @@
-5 x 5
-
-Squares (row, column value):
+5 x 5 (width x height)
+Squares (row, column, value):
 (1,1,2)
 (2,2,3)
 (3,3,0)

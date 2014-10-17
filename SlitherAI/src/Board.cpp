@@ -1,9 +1,13 @@
 #include "Board.h"
+#include <iostream>
 
-Board::Board(int width, int height)
+using namespace std;
+
+Board::Board(int width, int height, ArrayList<Square> squares)
 {
-    this.width=width;
-    this.height=height;
+    this->squares = ArrayList<Square>();
+    this->width=width;
+    this->height=height;
 }
 
 Board::~Board()
