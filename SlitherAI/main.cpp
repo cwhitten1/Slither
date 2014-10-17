@@ -1,14 +1,16 @@
 #include <iostream>
 #include <Square.h>
+#include <ArrayList.h>
 using namespace std;
 
 int main()
 {
     cout << "Hello world!" << endl;
-    Square s;
-    s.Setvalue(1);
-    cout << s.GetisValid() <<endl;
-    s.markSide("l");
-    cout<<s.GetisValid()<<endl;
+
+    ArrayList<int> a = ArrayList<int>();
+    a.add(4);
+    cout<< a.get(0)<<endl;
+    a.set(a.GetnextIndex(), 5);
+    cout << a.get(1) << endl;
     return 0;
 }
