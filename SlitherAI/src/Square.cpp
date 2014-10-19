@@ -3,7 +3,11 @@
 
 Square::Square()
 {
-    value = -1;
+}
+Square::Square(int value, Point topLeftPt)
+{
+    this->value = value; //A value of -1 denotes no value
+    this->topLeftPt = topLeftPt;
 
     //False means that sides are not marked
     s_left= false;

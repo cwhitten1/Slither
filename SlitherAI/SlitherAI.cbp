@@ -34,8 +34,15 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="PracBoard.txt" />
+		<Unit filename="include/ArrayList.h" />
+		<Unit filename="include/Board.h" />
+		<Unit filename="include/Point.h" />
 		<Unit filename="include/Square.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/ArrayList.cpp" />
+		<Unit filename="src/Board.cpp" />
+		<Unit filename="src/Point.cpp" />
 		<Unit filename="src/Square.cpp" />
 		<Extensions>
 			<code_completion />

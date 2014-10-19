@@ -1,15 +1,17 @@
 #ifndef POINT_H
 #define POINT_H
-
+#include <string>
+using namespace std;
 
 class Point
 {
     public:
+        Point();
         Point(int row, int column);
         virtual ~Point();
         int row;
         int column;
-        int findNeighbor(String direction); //Use "l/r/t/b"
+        Point findNeighbor(string direction); //Use "l/r/t/b"
     protected:
     private:
 };
