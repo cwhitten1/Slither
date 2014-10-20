@@ -6,7 +6,7 @@ using namespace std;
 Board::Board()
 {
 }
-Board::Board(int w, int h, ArrayList<Square>* sq)
+Board::Board(int w, int h, ArrayList<Square>& sq)
 {
     squares = sq;
     width=w;
@@ -17,7 +17,7 @@ Board::Board(int w, int h, ArrayList<Square>* sq)
 
 Board::~Board()
 {
-    squares->~ArrayList();
+    squares.~ArrayList();
 }
 
 void Board::makeGrid()
@@ -30,16 +30,17 @@ void Board::makeGrid()
     //Fill in grid with empty squares
     //fillGrid();
 
-    cout<< "Size" << squares->Getsize()<<endl;
+    cout<< "Size" << squares.Getsize()<<endl;
 
     //Add squares to the grid
-    for(int j = 0; j < squares->Getsize();j++)
+    for(int j = 0; j < squares.Getsize();j++)
     {
-        Square s = squares->get(j);
+        Square s = squares.get(j);
         Point tlCorner = s.GettopLeftPt();
         int row = tlCorner.row;
         int column = tlCorner.column;
 
+        cout<< row << "," <<column<<endl;
         grid[row][column].Setvalue(s.Getvalue());
         grid[row][column].SettopLeftPt(tlCorner);
     }

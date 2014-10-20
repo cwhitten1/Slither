@@ -7,11 +7,11 @@
 
 using namespace std;
 
-Board parseBoardFile(string filePath)
+Board* parseBoardFile(string filePath)
 {
     int width;
     int height;
-    ArrayList<Square>* squares;
+    ArrayList<Square> squares = ArrayList<Square>();
     Board* board;
 
     ifstream boardFile;
@@ -29,7 +29,6 @@ Board parseBoardFile(string filePath)
         getline(boardFile, line);
 
         //Load all squares
-        squares = new ArrayList<Square>();
         while(getline(boardFile, line))
         {
             int row = line.at(1) - '0' - 1; // -1 b/c input start at (1,1) and grid in program starts at (0,0)
@@ -37,14 +36,14 @@ Board parseBoardFile(string filePath)
             int value = line.at(5) - '0';
 
             Square s = Square(value, Point(row,column));
-            squares->add(s);
+            squares.add(s);
         }
         board = new Board(width, height, squares);
     }
     boardFile.close();
 
     if(board != NULL)
-        return *board;
+        return board;
     else
     {
         cout<<"Error parsing board data"<<endl;
@@ -55,8 +54,8 @@ Board parseBoardFile(string filePath)
 int main()
 {
     cout << "Hello world!" << endl;
-    Board b = parseBoardFile("PracBoard.txt");
-    b.drawBoard();
+    Board* b = parseBoardFile("PracBoard.txt");
+    b->drawBoard();
 
     return 0;
 }
