@@ -2,12 +2,12 @@
 #include <iostream>
 
 Square::Square()
-{
+{ value = -1;
 }
-Square::Square(int value, Point topLeftPt)
+Square::Square(int val, Point topLeft)
 {
-    this->value = value; //A value of -1 denotes no value
-    this->topLeftPt = topLeftPt;
+    value = val; //A value of -1 denotes no value
+    topLeftPt = topLeft;
 
     //False means that sides are not marked
     s_left= false;

@@ -5,14 +5,16 @@ template <class T>
 class ArrayList
 {
     public:
-        virtual ~ArrayList(){}
+        virtual ~ArrayList(){delete[] values;}
         ArrayList(){values = new T[40];nextIndex = 0;size=0; maxSize =40;}
         int Getsize() { return size; }
         int GetnextIndex() { return nextIndex; }
         void add(T val)
             {if(nextIndex == maxSize)
                     expandArray();
-             values[nextIndex] = val;nextIndex++;size++;} //Add to end of list
+             values[nextIndex] = val; //Add to end of list
+             nextIndex++;
+             size++;}
         T get(int index){return values[index];}
         void set(int index, T val){values[index] = val;}
         void removeAll(){delete[] values;}
