@@ -8,7 +8,7 @@ class Square
 {
     public:
         Square();
-        Square(int value, Point topLeftPt);
+        Square(int value, Point position);
         virtual ~Square();
         int Getvalue() { return value; }
         void Setvalue(int val) { value = val; }
@@ -16,13 +16,13 @@ class Square
         bool Gets_right() { return s_right; }
         bool Gets_top() { return s_top; }
         bool Gets_bottom() { return s_bottom; }
-        void markSide(string side); // Supports "l/r/t/b"
+        void toggleSide(string side); // Supports "L/R/T/B"
         bool GetisValid() { return isValid; }
         void SetisValid(bool val) { isValid = val; }
         int GetsideCount() { return sideCount; }
         void SetsideCount(int val) { sideCount = val; }
-        Point GettopLeftPt() { return topLeftPt;}
-        void SettopLeftPt(Point p) { topLeftPt = p;}
+        Point Getposition() { return position;}
+        void Setposition(Point p) { position = p;}
     protected:
     private:
         int value;
@@ -32,7 +32,7 @@ class Square
         bool s_top;
         bool s_bottom;
         bool isValid;
-        Point topLeftPt;
+        Point position;
         void determineValidity();
 };
 

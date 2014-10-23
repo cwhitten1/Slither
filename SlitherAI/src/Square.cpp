@@ -7,7 +7,7 @@ Square::Square()
 Square::Square(int val, Point topLeft)
 {
     value = val; //A value of -1 denotes no value
-    topLeftPt = topLeft;
+    position = topLeft;
 
     //False means that sides are not marked
     s_left= false;
@@ -24,16 +24,60 @@ Square::~Square()
     //dtor
 }
 
-void Square:: markSide(string side)
+void Square:: toggleSide(string side)
 {
-    if(side == "l")
-        s_left = true;
-    else if(side == "r")
-        s_right = true;
-    else if(side == "t")
-        s_top = true;
-    else if(side == "b")
-        s_bottom = true;
+    if(side == "L")
+    {
+        if(s_left == true)
+        {
+            s_left = false;
+            sideCount--;
+        }
+        else
+        {
+            s_left = true;
+            sideCount++;
+        }
+    }
+    else if(side == "R")
+    {
+        if(s_right)
+        {
+            s_right  = false;
+            sideCount--;
+        }
+        else
+        {
+            s_right = true;
+            sideCount++;
+        }
+    }
+    else if(side == "T")
+    {
+        if(s_top)
+        {
+            s_top  = false;
+            sideCount--;
+        }
+        else
+        {
+            s_top = true;
+            sideCount++;
+        }
+    }
+    else if(side == "B")
+    {
+        if(s_bottom)
+        {
+            s_bottom  = false;
+            sideCount--;
+        }
+        else
+        {
+            s_bottom = true;
+            sideCount++;
+        }
+    }
     else
     {
         cout<< "Invalid side type"<< endl;
@@ -41,7 +85,6 @@ void Square:: markSide(string side)
     }
 
     determineValidity();
-    sideCount++;
 }
 
  void Square::determineValidity()

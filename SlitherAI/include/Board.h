@@ -11,6 +11,7 @@ class Board
         int getWidth(){ return width;}
         int getHeight(){ return height;}
         ArrayList<Square> squares;
+        void makeMove(int row, int column, string side);
         void drawBoard();// Draws the board based on the grid.
         Square** getGrid() {return grid;} //Makes a 2d array based on squares values
     protected:

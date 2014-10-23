@@ -51,12 +51,58 @@ Board* parseBoardFile(string filePath)
     }
 }
 
+
+bool promptForMove(Board* b)
+{
+    cout<<endl<<"Specify move (row column 'L/R/T/B') (0 0 X to end): ";
+
+    int row;
+    int column;
+    string side;
+
+    try{
+        cin>>row;
+        cin>>column;
+        cin>>side;
+
+        if(cin.fail())
+        {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout<<"Please use numbers for row and column!!!"<<endl;
+            return true;
+        }
+
+        //Decrement to adjust for grid indexes which start at 0
+        row--;
+        column--;
+
+        if(row == -1 && column == -1 && side == "X")
+            return false;
+        else
+        {
+            b->makeMove(row, column, side);
+            return true;
+        }
+
+    }
+    catch(int e)
+    {
+        cout<<endl<<"Error reading your move!";
+
+    }
+}
+
+
+
 int main()
 {
-    cout << "Hello world!" << endl;
     Board* b = parseBoardFile("PracBoard.txt");
     b->drawBoard();
 
-    return 0;
-}
+    cout<<"Begin making moves (use 0 0 X to end)"<<endl;
 
+    bool keepMoving = true;
+    while(keepMoving)
+        keepMoving = promptForMove(b);
+}
