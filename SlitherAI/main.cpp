@@ -11,7 +11,7 @@ Board* parseBoardFile(string filePath)
 {
     int width;
     int height;
-    ArrayList<Square> squares = ArrayList<Square>();
+    ArrayList<Square> initialSquares = ArrayList<Square>();
     Board* board;
 
     ifstream boardFile;
@@ -28,7 +28,7 @@ Board* parseBoardFile(string filePath)
         //Skip lines
         getline(boardFile, line);
 
-        //Load all squares
+        //Load all initialSquares
         while(getline(boardFile, line))
         {
             int row = line.at(1) - '0' - 1; // -1 b/c input start at (1,1) and grid in program starts at (0,0)
@@ -36,9 +36,9 @@ Board* parseBoardFile(string filePath)
             int value = line.at(5) - '0';
 
             Square s = Square(value, Point(row,column));
-            squares.add(s);
+            initialSquares.add(s);
         }
-        board = new Board(width, height, squares);
+        board = new Board(width, height, initialSquares);
     }
     boardFile.close();
 
@@ -91,6 +91,8 @@ bool promptForMove(Board* b)
         cout<<endl<<"Error reading your move!";
 
     }
+
+    return true;
 }
 
 
@@ -103,6 +105,16 @@ int main()
     cout<<"Begin making moves (use 0 0 X to end)"<<endl;
 
     bool keepMoving = true;
+    string solutionMessage;
     while(keepMoving)
+    {
         keepMoving = promptForMove(b);
+        if(b->isSolved())
+        {
+            cout<<endl<<" YOU HAVE FOUND THE SOLUTION! CONGRATULATIONS!!!!"<<endl;
+            keepMoving = false;
+        }
+        else
+            cout<<endl<<" SORRY THAT IS NOT A SOLUTION!"<<endl;
+    }
 }

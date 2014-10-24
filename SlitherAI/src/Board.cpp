@@ -1,6 +1,6 @@
 #include "Board.h"
 #include <iostream>
-#include <Point.h>
+#include <stdbool.h>
 using namespace std;
 
 Board::Board()
@@ -8,16 +8,198 @@ Board::Board()
 }
 Board::Board(int w, int h, ArrayList<Square>& sq)
 {
-    squares = sq;
+    initialSquares = sq;
     width=w;
     height=h;
 
     makeGrid();
+    hasCrosses = 0;
+    markedSquares = new ArrayList<Point>();
 }
 
 Board::~Board()
 {
-    squares.~ArrayList();
+    initialSquares.~ArrayList();
+}
+
+bool Board::isSolved()
+{
+    bool solved = true;
+    if(areSquaresValid() == false)
+        return false; //If the square values are not satisfied then the board cannot be solved.
+    else
+    {
+        //For each marked square, make sure there are no crosses
+        for(int i = 0; i< markedSquares->Getsize(); i++ )
+        {
+            Point p = markedSquares->get(i);
+            int row = p.row;
+            int column = p.column;
+
+            Square s = grid[row][column];
+            checkForCrosses(s);
+        }
+
+        if(hasCrosses)
+        {
+            solved = false;
+            hasCrosses = false; //Reset the hasCrosses variable
+        }
+    }
+
+    return solved;
+}
+bool Board::areSquaresValid()
+{
+    for(int i = 0; i < height; i++)
+    {
+        for(int j = 0; j < width; j++)
+        {
+            Square s = grid[i][j];
+            if((s.GetisValid()) == false)
+                return false;
+        }
+    }
+
+    return true;
+}
+
+void Board::checkForCrosses(Square s)
+{
+    int sRow = s.Getposition().row;
+    int sColumn = s.Getposition().column;
+    bool left = s.Gets_left();
+    bool right = s.Gets_right();
+    bool top = s.Gets_top();
+    bool bottom = s.Gets_bottom();
+
+    //Whatever corner is marked, that is the square we will move to diagonally in order to evaluate for crosses
+    //i.e. top left moves row-1 and column -1
+    if(top && left)
+    {
+        bool hasAdj = false; //hasAdj here to make sure we don't assign the square s as the adj square as well.
+
+        if((sRow -1 >= 0) && (sColumn-1 >= 0))
+        {
+            sRow--;
+            sColumn--;
+            hasAdj = true;
+        }
+        else if(sRow -1 >= 0)
+        {
+            sRow--;
+            hasAdj = true;
+        }
+        else if(sColumn -1 >= 0)
+        {
+            sColumn--;
+            hasAdj = true;
+        }
+
+        if(hasAdj)
+        {
+            Square adj = grid[sRow][sColumn];
+            bool leftConflict =((s.Gets_left() == true) && (adj.Gets_bottom() == true)) ? true:false;
+            bool topConflict = ((s.Gets_top() == true) && (adj.Gets_right() == true))? true:false;
+            if(leftConflict || topConflict)
+                hasCrosses = true;
+        }
+    }
+    else if(bottom && right)
+    {
+        bool hasAdj = false; //hasAdj here to make sure we don't assign the square s as the adj square as well.
+
+        if((sRow +1 < height) && (sColumn+1 < width))
+        {
+            sRow++;
+            sColumn++;
+            hasAdj = true;
+        }
+        else if(sRow +1 < height)
+        {
+            sRow++;
+            hasAdj = true;
+        }
+        else if(sColumn +1 < width)
+        {
+            sColumn++;
+            hasAdj = true;
+        }
+
+        if(hasAdj)
+        {
+            Square adj = grid[sRow][sColumn];
+            bool rightConflict =((s.Gets_right() == true) && (adj.Gets_top() == true)) ? true:false;
+            bool bottomConflict = ((s.Gets_bottom() == true) && (adj.Gets_left() == true))? true:false;
+            if(rightConflict || bottomConflict)
+                hasCrosses = true;
+        }
+    }
+    else if(bottom && left)
+    {
+        bool hasAdj = false; //hasAdj here to make sure we don't assign the square s as the adj square as well.
+
+        if((sRow +1 < height) && (sColumn-1 >= 0))
+        {
+            sRow++;
+            sColumn--;
+            hasAdj = true;
+        }
+        else if(sRow +1 < height)
+        {
+            sRow++;
+            hasAdj = true;
+        }
+        else if(sColumn -1 >= 0)
+        {
+            sColumn--;
+            hasAdj = true;
+        }
+
+        if(hasAdj)
+        {
+            Square adj = grid[sRow][sColumn];
+            bool leftConflict =((s.Gets_left() == true) && (adj.Gets_top() == true)) ? true:false;
+            bool bottomConflict = ((s.Gets_bottom() == true) && (adj.Gets_right() == true))? true:false;
+            if(leftConflict || bottomConflict)
+                hasCrosses = true;
+        }
+    }
+    else if(top && right)
+    {
+                bool hasAdj = false; //hasAdj here to make sure we don't assign the square s as the adj square as well.
+
+        if((sRow - 1 >= 0) && (sColumn+1 < width))
+        {
+            sRow--;
+            sColumn++;
+            hasAdj = true;
+        }
+        else if(sRow -1 >= 0)
+        {
+            sRow--;
+            hasAdj = true;
+        }
+        else if(sColumn +1 < width)
+        {
+            sColumn++;
+            hasAdj = true;
+        }
+
+        if(hasAdj)
+        {
+            Square adj = grid[sRow][sColumn];
+            bool rightConflict =((s.Gets_right() == true) && (adj.Gets_bottom() == true)) ? true:false;
+            bool topConflict = ((s.Gets_top() == true) && (adj.Gets_left() == true))? true:false;
+            if(rightConflict || topConflict)
+                hasCrosses = true;
+        }
+    }
+    else
+    {
+        cout<<"Something wrong in checkForCrosses() method"<<endl;
+        return;
+    }
 }
 
 void Board::makeMove(int row, int column, string side)
@@ -69,10 +251,14 @@ void Board::makeMove(int row, int column, string side)
         {
             grid[row +1][column].toggleSide("T");
         }
+
         drawBoard();
     }
     else
         cout<<"Invalid move please try again"<<endl;
+
+    if(s->GetsideCount() > 0)
+        addToMSquares(Point(row,column));
 }
 
 void Board::makeGrid()
@@ -85,12 +271,10 @@ void Board::makeGrid()
     //Fill in grid with empty squares
     //fillGrid();
 
-    cout<< "Size: " << squares.Getsize()<<endl;
-
-    //Add squares to the grid
-    for(int j = 0; j < squares.Getsize();j++)
+    //Add initialSquares to the grid
+    for(int j = 0; j < initialSquares.Getsize();j++)
     {
-        Square s = squares.get(j);
+        Square s = initialSquares.get(j);
         Point tlCorner = s.Getposition();
         int row = tlCorner.row;
         int column = tlCorner.column;
@@ -185,3 +369,18 @@ void Board::drawBoard()
 }
 
 
+void Board::addToMSquares(Point p)
+{
+    int row = p.row;
+    int column = p.column;
+
+    //Make sure point does not already exist in markedSquares
+    for(int i = 0; i < markedSquares->Getsize(); i++)
+    {
+        Point pt = markedSquares->get(i);
+        if((pt.row == row) && (pt.column == column))
+            return;
+    }
+
+    markedSquares->add(p); //This will only be reached if point does not already exist.
+}

@@ -2,7 +2,16 @@
 #include <iostream>
 
 Square::Square()
-{ value = -1;
+{
+    value = -1;
+    //False means that sides are not marked
+    s_left= false;
+    s_right = false;
+    s_top = false;
+    s_bottom = false;
+
+    sideCount = 0;
+    isValid = true;
 }
 Square::Square(int val, Point topLeft)
 {
@@ -16,7 +25,7 @@ Square::Square(int val, Point topLeft)
     s_bottom = false;
 
     sideCount = 0;
-    isValid = true;
+    determineValidity();
 }
 
 Square::~Square()
@@ -99,7 +108,7 @@ void Square:: toggleSide(string side)
     //If the square has a value, check the sideCount
     if(value != -1)
     {
-        if((sideCount == value))
+        if(sideCount == value)
             isValid = true;
         else
             isValid = false;
