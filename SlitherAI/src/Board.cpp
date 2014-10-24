@@ -36,10 +36,10 @@ bool Board::isSolved()
             int row = p.row;
             int column = p.column;
 
-            //cout<<row<< " "<<column<<endl;
             Square s = grid[row][column];
             hasCrosses = checkForCrosses(s);
-            //cout<<hasCrosses<<endl;
+            //cout<<row<<" "<<column<<":"<<hasCrosses<<endl;
+            //cout<<s.Gets_top()<<" "<<s.Gets_right()<<" "<<s.Gets_bottom()<<" "<<s.Gets_left()<<endl;
             if(hasCrosses)
                 break; //No need for further eval if even one cross is found.
         }
@@ -84,10 +84,10 @@ bool Board::checkForCrosses(Square s)
         //Try to go up and left
         if((sRow -1 >= 0) && (sColumn-1 >= 0))
         {
-            sRow--;
-            sColumn--;
+            int row = sRow-1;
+            int col = sColumn-1;
 
-            Square adj = grid[sRow][sColumn];
+            Square adj = grid[row][col];
             bool leftConflict =((s.Gets_left() == true) && (adj.Gets_bottom() == true)) ? true:false;
             bool topConflict = ((s.Gets_top() == true) && (adj.Gets_right() == true))? true:false;
             if(leftConflict || topConflict)
@@ -96,9 +96,9 @@ bool Board::checkForCrosses(Square s)
         //Try to go just up
         else if(sRow -1 >= 0)
         {
-            sRow--;
+            int row = sRow-1;
 
-            Square adj = grid[sRow][sColumn];
+            Square adj = grid[row][sColumn];
             bool leftConflict =((s.Gets_left() == true) && (adj.Gets_left() == true)) ? true:false;
             if(leftConflict)
                 return true;
@@ -106,9 +106,9 @@ bool Board::checkForCrosses(Square s)
         //Try to go just left
         else if(sColumn -1 >= 0)
         {
-            sColumn--;
+            int col = sColumn-1;
 
-            Square adj = grid[sRow][sColumn];
+            Square adj = grid[sRow][col];
             bool topConflict = ((s.Gets_top() == true) && (adj.Gets_top() == true))? true:false;
             if(topConflict)
                 return true;
@@ -121,37 +121,46 @@ bool Board::checkForCrosses(Square s)
         //Try to go down and right
         if((sRow +1 < height) && (sColumn+1 < width))
         {
-            sRow++;
-            sColumn++;
+            int row  = sRow+1;
+            int col = sColumn+1;
 
             //Perform check
-            Square adj = grid[sRow][sColumn];
-            bool rightConflict =((s.Gets_right() == true) && (adj.Gets_top() == true)) ? true:false;
-            bool bottomConflict = ((s.Gets_bottom() == true) && (adj.Gets_left() == true))? true:false;
+            Square adj = grid[row][col];
+            bool rightConflict =(adj.Gets_top() == true) ? true:false;
+            bool bottomConflict = (adj.Gets_left() == true)? true:false;
             if(rightConflict || bottomConflict)
+            {
+                cout<<"Conflict in right or bottom"<<endl;
                 return true;
+            }
         }
         //Try to go just down
         else if(sRow +1 < height)
         {
-            sRow++;
+             int row  = sRow+1;
 
             //Perform check
-            Square adj = grid[sRow][sColumn];
+            Square adj = grid[row][sColumn];
             bool rightConflict =((s.Gets_right() == true) && (adj.Gets_right() == true)) ? true:false;
             if(rightConflict)
-                return true;
+            {
+                    cout<<"Conflict in right"<<endl;
+                    return true;
+            }
         }
         //Try to go just right
         else if(sColumn +1 < width)
         {
-            sColumn++;
+            int col = sColumn+1;
 
             //Perform check
-            Square adj = grid[sRow][sColumn];
+            Square adj = grid[sRow][col];
             bool bottomConflict = ((s.Gets_bottom() == true) && (adj.Gets_bottom() == true))? true:false;
             if(bottomConflict)
-                return true;
+            {
+                    cout<<"Conflict in bottom"<<endl;
+                    return true;
+            }
         }
     }
     if(bottom && left)
@@ -159,11 +168,11 @@ bool Board::checkForCrosses(Square s)
         //Try to go down and left
         if((sRow +1 < height) && (sColumn-1 >= 0))
         {
-            sRow++;
-            sColumn--;
+            int row = sRow+1;
+            int col = sColumn-1;
 
             //Perform check
-            Square adj = grid[sRow][sColumn];
+            Square adj = grid[row][col];
             bool leftConflict =((s.Gets_left() == true) && (adj.Gets_top() == true)) ? true:false;
             bool bottomConflict = ((s.Gets_bottom() == true) && (adj.Gets_right() == true))? true:false;
             if(leftConflict || bottomConflict)
@@ -172,10 +181,10 @@ bool Board::checkForCrosses(Square s)
         //Try to go just down
         else if(sRow +1 < height)
         {
-            sRow++;
+            int row = sRow+1;
 
             //Perform check
-            Square adj = grid[sRow][sColumn];
+            Square adj = grid[row][sColumn];
             bool leftConflict =((s.Gets_left() == true) && (adj.Gets_left() == true)) ? true:false;
             if(leftConflict)
                 return true;
@@ -183,10 +192,10 @@ bool Board::checkForCrosses(Square s)
         //Try to go just left
         else if(sColumn -1 >= 0)
         {
-            sColumn--;
+            int col = sColumn-1;
 
             //Perform check
-            Square adj = grid[sRow][sColumn];
+            Square adj = grid[sRow][col];
             bool bottomConflict = ((s.Gets_bottom() == true) && (adj.Gets_bottom() == true))? true:false;
             if(bottomConflict)
                 return true;
@@ -197,21 +206,22 @@ bool Board::checkForCrosses(Square s)
         //Try to go up and right
         if((sRow - 1 >= 0) && (sColumn+1 < width))
         {
-            sRow--;
-            sColumn++;
-            Square adj = grid[sRow][sColumn];
+            int row = sRow-1;
+            int col = sColumn+1;
+            Square adj = grid[row][col];
 
             //Perform check
             bool rightConflict =((s.Gets_right() == true) && (adj.Gets_bottom() == true)) ? true:false;
             bool topConflict = ((s.Gets_top() == true) && (adj.Gets_left() == true))? true:false;
             if(rightConflict || topConflict)
                 return true;
+
         }
         //Try to go just up
         else if(sRow -1 >= 0)
         {
-            sRow--;
-            Square adj = grid[sRow][sColumn];
+            int row = sRow-1;
+            Square adj = grid[row][sColumn];
 
             //Perform check
             bool rightConflict = ((s.Gets_right() == true) && (adj.Gets_right() == true))? true:false;
@@ -221,8 +231,8 @@ bool Board::checkForCrosses(Square s)
         //Try to go just right
         else if(sColumn +1 < width)
         {
-            sColumn++;
-            Square adj = grid[sRow][sColumn];
+            int col = sColumn+1;
+            Square adj = grid[sRow][col];
 
             //Perform check
             bool topConflict = ((s.Gets_top() == true) && (adj.Gets_top() == true))? true:false;
