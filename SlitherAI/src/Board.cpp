@@ -36,10 +36,11 @@ bool Board::isSolved()
             int row = p.row;
             int column = p.column;
 
+            cout<<row<< " "<<column<<endl;
             Square s = grid[row][column];
             hasCrosses = checkForCrosses(s);
-            cout<<row << " "<<column<<" ";
-            cout<<hasCrosses<<endl;
+            //cout<<row << " "<<column<<" ";
+            //cout<<hasCrosses<<endl;
             if(hasCrosses)
                 break; //No need for further eval if even one cross is found.
         }
@@ -237,14 +238,19 @@ bool Board::checkForCrosses(Square s)
 void Board::makeMove(int row, int column, string side)
 {
     Square* s = &grid[row][column];
-
+    Square* adj;
     if(side == "L")
     {
         s->toggleSide(side);
 
         //A left mark on square s will also mark the right side on the left adjacent square
         if(column -1 >= 0)
-            grid[row][column -1].toggleSide("R");
+        {
+            adj = &(grid[row][column -1]);
+            adj->toggleSide("R");
+            if(adj->GetsideCount() > 0)
+                addToMSquares(Point(row,column-1));
+        }
 
         drawBoard();
     }
@@ -254,7 +260,12 @@ void Board::makeMove(int row, int column, string side)
 
         //A right mark on square s will also mark the left side on the right adjacent square
         if(column+1 < width)
-            grid[row][column +1].toggleSide("L");
+        {
+            adj = &(grid[row][column +1]);
+            adj->toggleSide("L");
+            if(adj->GetsideCount() > 0)
+                addToMSquares(Point(row,column+1));
+        }
 
         drawBoard();
     }
@@ -264,7 +275,12 @@ void Board::makeMove(int row, int column, string side)
 
         //A top mark on square s will also mark the bottom side on the top adjacent square
         if(row - 1 >= 0)
-            grid[row - 1][column].toggleSide("B");
+        {
+            adj = &(grid[row - 1][column]);
+            adj->toggleSide("B");
+            if(adj->GetsideCount() > 0)
+                addToMSquares(Point(row-1,column));
+        }
 
         drawBoard();
     }
@@ -275,13 +291,19 @@ void Board::makeMove(int row, int column, string side)
         //A bottom mark on square s will also mark the top side on the bottom adjacent square
         if(row+1 < height)
         {
-            grid[row +1][column].toggleSide("T");
+           adj = &(grid[row +1][column]);
+           adj->toggleSide("T");
+           if(adj->GetsideCount() > 0)
+                addToMSquares(Point(row+1,column));
         }
 
         drawBoard();
     }
     else
+    {
         cout<<"Invalid move please try again"<<endl;
+        return; //Return so that the null adj is not addedToMSquares
+    }
 
     if(s->GetsideCount() > 0)
         addToMSquares(Point(row,column));
@@ -295,7 +317,7 @@ void Board::makeGrid()
         grid[i] = new Square[width];
 
     //Fill in grid with empty squares
-    //fillGrid();
+    fillGrid();
 
     //Add initialSquares to the grid
     for(int j = 0; j < initialSquares.Getsize();j++)
@@ -318,7 +340,7 @@ void Board::fillGrid()
     {
         for(int j =0; j<width; j++)
         {
-            grid[i][j] = Square();
+            grid[i][j] = Square(-1,Point(i,j)); //Fill grid with empty squares
         }
     }
 }
