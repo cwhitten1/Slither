@@ -79,6 +79,12 @@ bool promptForMove(Board* b)
 
         if(row == -1 && column == -1 && side == "X")
             return false;
+            //Check row and column
+        else if(row >= b->getHeight() || column >= b->getWidth() || row < 0 || column < 0)
+        {
+            cout<<"Invalid move please try again"<<endl;
+            promptForMove(b); //Need to keep making moves (this will be expensive on stack if a massive # of incorrect moves are made)
+        }
         else
         {
             b->makeMove(row, column, side);
@@ -96,7 +102,6 @@ bool promptForMove(Board* b)
 }
 
 
-
 int main()
 {
     Board* b = parseBoardFile("PracBoard.txt");
@@ -109,12 +114,19 @@ int main()
     while(keepMoving)
     {
         keepMoving = promptForMove(b);
-        if(b->isSolved())
+        if(b->areSquaresValid())
         {
-            cout<<endl<<" YOU HAVE FOUND THE SOLUTION! CONGRATULATIONS!!!!"<<endl;
-            keepMoving = false;
+            if(b->isSolved())
+            {
+                //cout<<b->getGrid()[0][1].GetisValid();
+                //b->getGrid()[0][1].determineValidity();
+                //cout<<b->getGrid()[0][1].GetisValid();
+
+                cout<<endl<<" YOU HAVE FOUND THE SOLUTION! CONGRATULATIONS!!!!"<<endl;
+                keepMoving = false;
+            }
+            else
+                cout<<endl<<" SORRY THAT IS NOT A SOLUTION!"<<endl;
         }
-        else
-            cout<<endl<<" SORRY THAT IS NOT A SOLUTION!"<<endl;
     }
 }

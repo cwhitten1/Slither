@@ -11,7 +11,7 @@ Square::Square()
     s_bottom = false;
 
     sideCount = 0;
-    isValid = true;
+    determineValidity();
 }
 Square::Square(int val, Point topLeft)
 {

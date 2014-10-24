@@ -23,6 +23,7 @@ class Square
         void SetsideCount(int val) { sideCount = val; }
         Point Getposition() { return position;}
         void Setposition(Point p) { position = p;}
+        void determineValidity();
     protected:
     private:
         int value;
@@ -33,7 +34,7 @@ class Square
         bool s_bottom;
         bool isValid;
         Point position;
-        void determineValidity();
+
 };
 
 #endif // SQUARE_H
