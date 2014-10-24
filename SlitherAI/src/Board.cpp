@@ -36,10 +36,9 @@ bool Board::isSolved()
             int row = p.row;
             int column = p.column;
 
-            cout<<row<< " "<<column<<endl;
+            //cout<<row<< " "<<column<<endl;
             Square s = grid[row][column];
             hasCrosses = checkForCrosses(s);
-            //cout<<row << " "<<column<<" ";
             //cout<<hasCrosses<<endl;
             if(hasCrosses)
                 break; //No need for further eval if even one cross is found.

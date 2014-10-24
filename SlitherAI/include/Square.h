@@ -11,7 +11,7 @@ class Square
         Square(int value, Point position);
         virtual ~Square();
         int Getvalue() { return value; }
-        void Setvalue(int val) { value = val; }
+        void Setvalue(int val) { value = val; determineValidity(); }
         bool Gets_left() { return s_left; } //Get whether or not left side is marked.
         bool Gets_right() { return s_right; }
         bool Gets_top() { return s_top; }

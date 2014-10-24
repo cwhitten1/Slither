@@ -110,7 +110,6 @@ int main()
     cout<<"Begin making moves (use 0 0 X to end)"<<endl;
 
     bool keepMoving = true;
-    string solutionMessage;
     while(keepMoving)
     {
         keepMoving = promptForMove(b);
@@ -118,10 +117,6 @@ int main()
         {
             if(b->isSolved())
             {
-                //cout<<b->getGrid()[0][1].GetisValid();
-                //b->getGrid()[0][1].determineValidity();
-                //cout<<b->getGrid()[0][1].GetisValid();
-
                 cout<<endl<<" YOU HAVE FOUND THE SOLUTION! CONGRATULATIONS!!!!"<<endl;
                 keepMoving = false;
             }
