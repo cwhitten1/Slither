@@ -1,7 +1,7 @@
 #ifndef SQUARE_H
 #define SQUARE_H
 #include <string>
-#include <Point.h>
+#include "Point.h"
 using namespace std;
 
 class Square

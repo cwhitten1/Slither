@@ -1,9 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <Square.h>
-#include <ArrayList.h>
-#include <Board.h>
+#include "Square.h"
+#include "ArrayList.h"
+#include "Board.h"
 
 using namespace std;
 
@@ -15,7 +15,7 @@ Board* parseBoardFile(string filePath)
     Board* board;
 
     ifstream boardFile;
-    boardFile.open("PracBoard.txt");
+    boardFile.open(filePath.c_str());
     string line;
     if(boardFile.is_open())
     {
@@ -101,14 +101,9 @@ bool promptForMove(Board* b)
     return true;
 }
 
-
-int main()
+void startGame(Board *b)
 {
-    Board* b = parseBoardFile("PracBoard.txt");
-    b->drawBoard();
-
-    cout<<"Begin making moves (use 0 0 X to end)"<<endl;
-
+    //Move loop
     bool keepMoving = true;
     while(keepMoving)
     {
@@ -117,11 +112,57 @@ int main()
         {
             if(b->isSolved())
             {
-                cout<<endl<<" YOU HAVE FOUND THE SOLUTION! CONGRATULATIONS!!!!"<<endl;
+                cout<<endl<<" YOU HAVE FOUND THE SOLUTION! CONGRATULATIONS!!!!"<<endl<<endl;
                 keepMoving = false;
             }
             else
                 cout<<endl<<" SORRY THAT IS NOT A SOLUTION!"<<endl;
         }
     }
+}
+int main()
+{
+    //Description
+    cout<<"\t\t\t   Welcome to Slither!!!"<<endl<<endl<<"~ You will be given a 2D grid that is full of squares with unmarked sides."<<endl;
+    cout<<"~ You must try to form a continuous loop";
+    cout<<" by marking sides on the squares."<<endl<<"~ Squares with a value specify the";
+    cout<<" exact # of sides it must have around it."<<endl<<endl;
+    cout<<"NOTE: Crosses are not allowed i.e. _|_"<<endl<<endl;
+    cout<<"NOTE: You must input the path for the grid files"<<endl<<" \t(see README.txt for proper format of data files)"<<endl<<endl;
+    cout<<"Good luck!!!"<<endl<<endl;
+
+    //Read initial grid
+    string filePath;
+    cout<<"Please enter grid filepath: ";
+    cin>>filePath;
+
+    //Create and draw initial board
+    Board* b = parseBoardFile(filePath);
+    b->drawBoard();
+
+    //Game loop
+    bool keepPlaying = true;
+    cout<<"Begin making moves (use 0 0 X to end)"<<endl;
+    while(keepPlaying)
+    {
+        startGame(b);
+        string pAgain;
+        cout<<endl<<"Would you like to play again? (Y/N): ";
+        cin>> pAgain;
+        if(pAgain != "Y")
+        {
+            cout<<endl<<"Exiting game!"<<endl;
+            return 0;
+        }
+        else
+        {
+            string filePath;
+            cout<<"Please enter grid filepath: ";
+            cin>>filePath;
+
+            b = parseBoardFile(filePath);
+            b->drawBoard();
+        }
+    }
+
 }

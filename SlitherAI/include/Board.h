@@ -1,8 +1,8 @@
 #ifndef BOARD_H
 #define BOARD_H
-#include <ArrayList.h>
-#include <Square.h>
-#include <Point.h>
+#include "ArrayList.h"
+#include "Square.h"
+#include "Point.h"
 class Board
 {
     public:

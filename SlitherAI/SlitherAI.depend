@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1414170793 source:c:\users\chris\documents\slither\slitherai\main.cpp
+1414190867 source:c:\users\chris\documents\slither\slitherai\main.cpp
 	<iostream>
 	<fstream>
 	<string>
@@ -7,9 +7,9 @@
 	<ArrayList.h>
 	<Board.h>
 
-1414171232 c:\users\chris\documents\slither\slitherai\include\square.h
+1414198837 c:\users\chris\documents\slither\slitherai\include\square.h
 	<string>
-	<Point.h>
+	"Point.h"
 
 1414167189 source:c:\users\chris\documents\slither\slitherai\src\square.cpp
 	"Square.h"
