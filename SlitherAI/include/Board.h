@@ -17,6 +17,7 @@ class Board
         void drawBoard();// Draws the board based on the grid.
         Square** getGrid() {return grid;} //Makes a 2d array based on squares values.
         bool isSolved();
+        bool traceLoop();// Returns true if loop is continuous
     protected:
     private:
         int width;
@@ -25,6 +26,7 @@ class Board
         void makeGrid();
         void fillGrid();
         void addToMSquares(Point p);
+        void removeFromMSquares(Point p);
         ArrayList<Square> initialSquares;
         ArrayList<Point>* markedSquares; //Holds the positions of any squares that have been marked.
 };

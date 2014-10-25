@@ -44,11 +44,134 @@ bool Board::isSolved()
                 break; //No need for further eval if even one cross is found.
         }
 
-        if(hasCrosses)
+        //If the grid has crosses or does not make a continuous loop, the board is not solved.
+        if(hasCrosses || !traceLoop())
             solved = false;
     }
 
     return solved;
+}
+
+bool Board::traceLoop()
+{
+    //This algorithm will match an edge's points with other edges' points
+    ArrayList<Point> edgePoints = ArrayList<Point>(); //
+
+    //Start algorithm
+    for(int i = 0; i< markedSquares->Getsize(); i++ )
+    {
+        Point p = markedSquares->get(i);
+        int row = p.row;
+        int column = p.column;
+
+        Square s = grid[row][column];
+
+        //Get the points for this square
+        Point tl_p = Point(row, column);
+        Point tr_p = Point(row, column+1);
+        Point bl_p = Point(row+1, column);
+        Point br_p = Point(row+1, column+1);
+
+        //Get the marked sides
+        bool left = s.Gets_left();
+        bool right = s.Gets_right();
+        bool top = s.Gets_top();
+        bool bottom = s.Gets_bottom();
+
+        //Logic to decide which points to add
+        if(top)
+        {
+             int matchIndex_tl = edgePoints.find(tl_p); //Will return -1 if no match
+             int matchIndex_tr = edgePoints.find(tr_p); //Will return -1 if no match
+
+             //If either point can't find a match, then we know that we are not looking at a side which already exists.
+             if(matchIndex_tl == -1 || matchIndex_tr == -1)
+             {
+                //Top left point
+                if(matchIndex_tl == -1)
+                    edgePoints.add(tl_p);
+                else
+                    edgePoints.remove(matchIndex_tl);
+
+                //Top right point
+                if(matchIndex_tr == -1)
+                    edgePoints.add(tr_p);
+                else
+                    edgePoints.remove(matchIndex_tr);
+             }
+        }
+        if(bottom)
+        {
+            int matchIndex_bl = edgePoints.find(bl_p); //Will return -1 if no match
+            int matchIndex_br = edgePoints.find(br_p); //Will return -1 if no match
+
+            if(matchIndex_bl == -1 || matchIndex_br == -1)
+             {
+                //Bottom left point
+                if(matchIndex_bl == -1)
+                    edgePoints.add(bl_p);
+                else
+                    edgePoints.remove(matchIndex_bl);
+
+                //Bottom right point
+                if(matchIndex_br == -1)
+                    edgePoints.add(br_p);
+                else
+                    edgePoints.remove(matchIndex_br);
+             }
+        }
+        if(left)
+        {
+            int matchIndex_tl = edgePoints.find(tl_p); //Will return -1 if no match
+            int matchIndex_bl = edgePoints.find(bl_p); //Will return -1 if no match
+
+             if(matchIndex_tl == -1 || matchIndex_bl == -1)
+             {
+                //Top left point
+                if(matchIndex_tl == -1)
+                    edgePoints.add(tl_p);
+                else
+                    edgePoints.remove(matchIndex_tl);
+
+                //Bottom left point
+                if(matchIndex_bl == -1)
+                    edgePoints.add(bl_p);
+                else
+                    edgePoints.remove(matchIndex_bl);
+             }
+        }
+        if(right)
+        {
+            int matchIndex_tr = edgePoints.find(tr_p); //Will return -1 if no match
+            int matchIndex_br = edgePoints.find(br_p); //Will return -1 if no match
+
+            if(matchIndex_tr == -1 || matchIndex_br == -1)
+             {
+                //Top right point
+                if(matchIndex_tr == -1)
+                    edgePoints.add(tr_p);
+                else
+                    edgePoints.remove(matchIndex_tr);
+
+                //Bottom right point
+                if(matchIndex_br == -1)
+                    edgePoints.add(br_p);
+                else
+                    edgePoints.remove(matchIndex_br);
+             }
+        }
+    cout<<edgePoints.Getsize()<<" ";
+    }
+    cout<<endl;
+    //If the loop is continuous, then each edgePoint should have eventually been matched
+    //when another edge was added. When a match occurs, we remove the edgePoint from the arraylist.
+    //Therefore, if every edgePoint has exactly one match (which is the def. of a continuous loop)
+    //the edgePoints arraylist will be empty.
+    cout<<edgePoints.Getsize()<<endl;
+    if(edgePoints.Getsize() == 0)
+        return true;
+    else
+        return false;
 }
 bool Board::areSquaresValid()
 {
@@ -259,6 +382,8 @@ void Board::makeMove(int row, int column, string side)
             adj->toggleSide("R");
             if(adj->GetsideCount() > 0)
                 addToMSquares(Point(row,column-1));
+            else
+                removeFromMSquares(Point(row,column-1));
         }
 
         drawBoard();
@@ -274,6 +399,8 @@ void Board::makeMove(int row, int column, string side)
             adj->toggleSide("L");
             if(adj->GetsideCount() > 0)
                 addToMSquares(Point(row,column+1));
+            else
+                removeFromMSquares(Point(row,column+1));
         }
 
         drawBoard();
@@ -289,6 +416,8 @@ void Board::makeMove(int row, int column, string side)
             adj->toggleSide("B");
             if(adj->GetsideCount() > 0)
                 addToMSquares(Point(row-1,column));
+            else
+                removeFromMSquares(Point(row-1,column));
         }
 
         drawBoard();
@@ -304,6 +433,8 @@ void Board::makeMove(int row, int column, string side)
            adj->toggleSide("T");
            if(adj->GetsideCount() > 0)
                 addToMSquares(Point(row+1,column));
+            else
+                removeFromMSquares(Point(row+1,column));
         }
 
         drawBoard();
@@ -316,6 +447,8 @@ void Board::makeMove(int row, int column, string side)
 
     if(s->GetsideCount() > 0)
         addToMSquares(Point(row,column));
+    else
+        removeFromMSquares(Point(row,column));
 }
 
 void Board::makeGrid()
@@ -440,4 +573,11 @@ void Board::addToMSquares(Point p)
     }
 
     markedSquares->add(p); //This will only be reached if point does not already exist.
+}
+
+void Board::removeFromMSquares(Point p)
+{
+    int index = markedSquares->find(p);
+    if(index != -1)
+        markedSquares->remove(index);
 }

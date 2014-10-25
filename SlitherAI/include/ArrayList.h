@@ -17,7 +17,22 @@ class ArrayList
              size++;}
         T get(int index){return values[index];}
         void set(int index, T val){values[index] = val;}
-        void removeAll(){delete[] values;}
+        int find(T val)
+            {
+                for(int i = 0; i < size; i++)
+                {
+                    T curr = get(i);
+                    if(curr == val)
+                        return i;
+                }
+                return -1;//If no match is found
+            } //Returns the index of first match
+        void remove(int index)
+            {
+                for(int i = index+1; i <size; i++)
+                    values[i-1] = values[i];
+                size--;
+            }
     protected:
         T* values;
     private:
@@ -36,7 +51,6 @@ class ArrayList
             delete[] values;
 
             values = newArr;
-            delete[] newArr;
         }
 
 
