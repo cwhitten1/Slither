@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1414199046 source:c:\users\chris\documents\slither\slitherai\main.cpp
+1414263571 source:c:\users\chris\documents\slither\slitherai\main.cpp
 	<iostream>
 	<fstream>
 	<string>
@@ -7,34 +7,38 @@
 	"ArrayList.h"
 	"Board.h"
 
-1414198837 c:\users\chris\documents\slither\slitherai\include\square.h
+1414195237 c:\users\chris\documents\slither\slitherai\include\square.h
 	<string>
 	"Point.h"
 
-1414167189 source:c:\users\chris\documents\slither\slitherai\src\square.cpp
+1414163589 source:c:\users\chris\documents\slither\slitherai\src\square.cpp
 	"Square.h"
 	<iostream>
 
-1413648130 source:c:\users\chris\documents\slither\slitherai\src\arraylist.cpp
+1413644530 source:c:\users\chris\documents\slither\slitherai\src\arraylist.cpp
 	"ArrayList.h"
 
-1414209489 c:\users\chris\documents\slither\slitherai\include\arraylist.h
+1414263563 c:\users\chris\documents\slither\slitherai\include\arraylist.h
 
-1414212238 c:\users\chris\documents\slither\slitherai\include\board.h
+1416762995 c:\users\chris\documents\slither\slitherai\include\board.h
 	"ArrayList.h"
 	"Square.h"
 	"Point.h"
+	"Edge.h"
 
-1414208846 c:\users\chris\documents\slither\slitherai\include\point.h
+1414205246 c:\users\chris\documents\slither\slitherai\include\point.h
 	<string>
 
-1414207803 source:c:\users\chris\documents\slither\slitherai\src\board.cpp
+1416763110 source:c:\users\chris\documents\slither\slitherai\src\board.cpp
 	"Board.h"
 	<iostream>
 	<stdbool.h>
 
-1413649040 source:c:\users\chris\documents\slither\slitherai\src\point.cpp
+1413645440 source:c:\users\chris\documents\slither\slitherai\src\point.cpp
 	"Point.h"
 	<iostream>
 	<string>
+
+1416763189 c:\users\chris\documents\slither\slitherai\include\edge.h
+	"Point.h"
 

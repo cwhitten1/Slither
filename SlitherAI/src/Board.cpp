@@ -13,7 +13,6 @@ Board::Board(int w, int h, ArrayList<Square>& sq)
     height=h;
 
     makeGrid();
-    markedSquares = new ArrayList<Point>();
 }
 
 Board::~Board()
@@ -23,6 +22,7 @@ Board::~Board()
 
 bool Board::isSolved()
 {
+    ArrayList<Point> markedSquares = generateMarkedSquares();
     bool solved = true;
     if(areSquaresValid() == false)
         return false; //If the square values are not satisfied then the board cannot be solved.
@@ -30,9 +30,9 @@ bool Board::isSolved()
     {
         bool hasCrosses = false;
         //For each marked square, make sure there are no crosses
-        for(int i = 0; i< markedSquares->Getsize(); i++ )
+        for(int i = 0; i< markedSquares.Getsize(); i++ )
         {
-            Point p = markedSquares->get(i);
+            Point p = markedSquares.get(i);
             int row = p.row;
             int column = p.column;
 
@@ -54,13 +54,14 @@ bool Board::isSolved()
 
 bool Board::traceLoop()
 {
+    ArrayList<Point> markedSquares = generateMarkedSquares();
     //This algorithm will match an edge's points with other edges' points
     ArrayList<Point> edgePoints = ArrayList<Point>(); //
 
     //Start algorithm
-    for(int i = 0; i< markedSquares->Getsize(); i++ )
+    for(int i = 0; i< markedSquares.Getsize(); i++ )
     {
-        Point p = markedSquares->get(i);
+        Point p = markedSquares.get(i);
         int row = p.row;
         int column = p.column;
 
@@ -380,10 +381,6 @@ void Board::makeMove(int row, int column, string side)
         {
             adj = &(grid[row][column -1]);
             adj->toggleSide("R");
-            if(adj->GetsideCount() > 0)
-                addToMSquares(Point(row,column-1));
-            else
-                removeFromMSquares(Point(row,column-1));
         }
 
         drawBoard();
@@ -397,10 +394,6 @@ void Board::makeMove(int row, int column, string side)
         {
             adj = &(grid[row][column +1]);
             adj->toggleSide("L");
-            if(adj->GetsideCount() > 0)
-                addToMSquares(Point(row,column+1));
-            else
-                removeFromMSquares(Point(row,column+1));
         }
 
         drawBoard();
@@ -414,10 +407,6 @@ void Board::makeMove(int row, int column, string side)
         {
             adj = &(grid[row - 1][column]);
             adj->toggleSide("B");
-            if(adj->GetsideCount() > 0)
-                addToMSquares(Point(row-1,column));
-            else
-                removeFromMSquares(Point(row-1,column));
         }
 
         drawBoard();
@@ -431,10 +420,6 @@ void Board::makeMove(int row, int column, string side)
         {
            adj = &(grid[row +1][column]);
            adj->toggleSide("T");
-           if(adj->GetsideCount() > 0)
-                addToMSquares(Point(row+1,column));
-            else
-                removeFromMSquares(Point(row+1,column));
         }
 
         drawBoard();
@@ -444,11 +429,6 @@ void Board::makeMove(int row, int column, string side)
         cout<<"Invalid move please try again"<<endl;
         return; //Return so that the null adj is not addedToMSquares
     }
-
-    if(s->GetsideCount() > 0)
-        addToMSquares(Point(row,column));
-    else
-        removeFromMSquares(Point(row,column));
 }
 
 void Board::makeGrid()
@@ -559,25 +539,59 @@ void Board::drawBoard()
 }
 
 
-void Board::addToMSquares(Point p)
+ArrayList<Point> Board::generateMarkedSquares()
 {
-    int row = p.row;
-    int column = p.column;
-
-    //Make sure point does not already exist in markedSquares
-    for(int i = 0; i < markedSquares->Getsize(); i++)
+    ArrayList<Point> markedSquares = ArrayList<Point>();
+    for(int i = 0; i < height; i++)
     {
-        Point pt = markedSquares->get(i);
-        if((pt.row == row) && (pt.column == column))
-            return;
+        for(int j=0; j < width; j++)
+        {
+            Square s = grid[i][j];
+            Point pos = s.Getposition();
+
+            if(s.Gets_bottom() || s.Gets_left() || s.Gets_right() || s.Gets_top())
+                markedSquares.add(pos);
+        }
     }
 
-    markedSquares->add(p); //This will only be reached if point does not already exist.
+    return markedSquares;
 }
 
-void Board::removeFromMSquares(Point p)
+ArrayList<Edge> Board::generateMarkedEdges(ArrayList<Point>& markedSquares)
 {
-    int index = markedSquares->find(p);
-    if(index != -1)
-        markedSquares->remove(index);
+    ArrayList<Edge> markedEdges = ArrayList<Edge>();
+    //For every marked square
+    for(int i =0; i < markedSquares.Getsize(); i++)
+    {
+        Point sqPos = markedSquares.get(i);
+        Square s = grid[sqPos.row][sqPos.column];
+
+       //If one of it's edges is marked and is not yet in the list of edges, add it
+       if(s.Gets_top())
+       {
+           Edge top = Edge( Point(sqPos.row, sqPos.column), Point(sqPos.row, sqPos.column+1) );
+           if(markedEdges.find(top) == -1)
+                markedEdges.add(top);
+       }
+       if(s.Gets_bottom())
+       {
+           Edge bottom = Edge( Point(sqPos.row+1, sqPos.column), Point(sqPos.row+1, sqPos.column+1) );
+           if(markedEdges.find(bottom) == -1)
+                markedEdges.add(bottom);
+       }
+       if(s.Gets_left())
+       {
+           Edge left = Edge( Point(sqPos.row, sqPos.column), Point(sqPos.row+1, sqPos.column) );
+           if(markedEdges.find(left) == -1)
+                markedEdges.add(left);
+       }
+       if(s.Gets_right())
+       {
+           Edge right = Edge( Point(sqPos.row, sqPos.column+1), Point(sqPos.row+1, sqPos.column+1) );
+           if(markedEdges.find(right) == -1)
+                markedEdges.add(right);
+       }
+    }
+
+    return markedEdges;
 }

@@ -3,6 +3,7 @@
 #include "ArrayList.h"
 #include "Square.h"
 #include "Point.h"
+#include "Edge.h"
 class Board
 {
     public:
@@ -25,10 +26,9 @@ class Board
         Square** grid;
         void makeGrid();
         void fillGrid();
-        void addToMSquares(Point p);
-        void removeFromMSquares(Point p);
         ArrayList<Square> initialSquares;
-        ArrayList<Point>* markedSquares; //Holds the positions of any squares that have been marked.
+        ArrayList<Point> generateMarkedSquares();
+        ArrayList<Edge> generateMarkedEdges(ArrayList<Point>& markedSquares); //Gets the marked edges with no duplicates using markedSquares.
 };
 
 #endif // BOARD_H
