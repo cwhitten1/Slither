@@ -108,14 +108,15 @@ void startGame(Board *b)
     while(keepMoving)
     {
         keepMoving = promptForMove(b);
-        if(b->areSquaresValid())
+
+        if(b->isSolved())
         {
-            if(b->isSolved())
-            {
-                cout<<endl<<" YOU HAVE FOUND THE SOLUTION! CONGRATULATIONS!!!!"<<endl<<endl;
-                keepMoving = false;
-            }
-            else
+            cout<<endl<<" YOU HAVE FOUND A SOLUTION! CONGRATULATIONS!!!!"<<endl<<endl;
+            keepMoving = false;
+        }
+        else
+        {
+            if(b->areSquaresValid())
                 cout<<endl<<" SORRY THAT IS NOT A SOLUTION!"<<endl;
         }
     }
@@ -157,7 +158,7 @@ int main()
         else
         {
             string filePath;
-            cout<<"Please enter grid filepath: ";
+            cout<<endl<<endl<<"Please enter grid filepath: ";
             cin>>filePath;
 
             b = parseBoardFile(filePath);
