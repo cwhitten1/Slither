@@ -23,6 +23,48 @@ Board::~Board()
 bool Board::isSolved()
 {
     ArrayList<Point> markedSquares = generateMarkedSquares();
+    ArrayList<Edge> markedEdges = generateMarkedEdges(markedSquares);
+    ArrayList<Point> edgePoints = ArrayList<Point>();
+
+    for(int i = 0; i < markedEdges.Getsize(); i++)
+    {
+        Edge e = markedEdges.get(i);
+        //cout<< "Edge " << i <<endl;
+        //If point 1 has not been added, add it, else remove it
+        int index1 = edgePoints.find(e.Getp1());
+        if(index1 == -1)
+        {
+            edgePoints.add(e.Getp1());
+            //cout<<"Added point: "<< e.Getp1().row <<" "<<e.Getp1().column<<endl;
+        }
+        else
+        {
+            edgePoints.remove(index1);
+            //cout<<"Removed point: "<< e.Getp1().row <<" "<<e.Getp1().column<<endl;
+        }
+
+        //If point 2 has not been added, add it, else remove it
+        int index2 = edgePoints.find(e.Getp2());
+        if(index2 == -1)
+        {
+            edgePoints.add(e.Getp2());
+            //cout<<"Added point: "<< e.Getp2().row <<" "<<e.Getp2().column<<endl;
+        }
+        else
+        {
+            edgePoints.remove(index2);
+            //cout<<"Removed point: "<< e.Getp2().row <<" "<<e.Getp2().column<<endl;
+        }
+    }
+    if(edgePoints.Getsize() > 0)
+        return false;
+    else
+        return true;
+}
+/*
+bool Board::isSolved()
+{
+    ArrayList<Point> markedSquares = generateMarkedSquares();
     bool solved = true;
     if(areSquaresValid() == false)
         return false; //If the square values are not satisfied then the board cannot be solved.
@@ -50,7 +92,7 @@ bool Board::isSolved()
     }
 
     return solved;
-}
+}*/
 
 bool Board::traceLoop()
 {
@@ -429,6 +471,7 @@ void Board::makeMove(int row, int column, string side)
         cout<<"Invalid move please try again"<<endl;
         return; //Return so that the null adj is not addedToMSquares
     }
+    isSolved();
 }
 
 void Board::makeGrid()

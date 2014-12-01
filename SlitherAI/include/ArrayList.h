@@ -32,6 +32,7 @@ class ArrayList
                 for(int i = index+1; i <size; i++)
                     values[i-1] = values[i];
                 size--;
+                nextIndex--;
             }
     protected:
         T* values;
