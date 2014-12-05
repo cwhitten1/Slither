@@ -80,6 +80,22 @@ bool Board::areSquaresValid()
     return true;
 }
 
+int Board::getNumValidSquares()
+{
+    int num = 0;
+    for(int i = 0; i < height; i++)
+    {
+        for(int j = 0; j < width; j++)
+        {
+            Square s = grid[i][j];
+            if((s.GetisValid()) == true)
+                num++;
+        }
+    }
+
+    return num;
+}
+
 void Board::makeMove(int row, int column, string side)
 {
     Square* s = &grid[row][column];
