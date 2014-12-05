@@ -17,7 +17,7 @@ class Board
         void makeMove(int row, int column, string side);
         void drawBoard();// Draws the board based on the grid.
         Square** getGrid() {return grid;} //Makes a 2d array based on squares values.
-        bool isSolved();
+        bool isContLoop();
         bool traceLoop();// Returns true if loop is continuous
     protected:
     private:

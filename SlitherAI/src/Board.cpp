@@ -20,7 +20,7 @@ Board::~Board()
     initialSquares.~ArrayList();
 }
 
-bool Board::isSolved()
+bool Board::isContLoop()
 {
     ArrayList<Point> markedSquares = generateMarkedSquares();
     ArrayList<Edge> markedEdges = generateMarkedEdges(markedSquares);
@@ -56,7 +56,7 @@ bool Board::isSolved()
             //cout<<"Removed point: "<< e.Getp2().row <<" "<<e.Getp2().column<<endl;
         }
     }
-    if(edgePoints.Getsize() > 0 || !areSquaresValid())
+    if(edgePoints.Getsize() > 0)
         return false;
     else
         return true;
@@ -141,7 +141,6 @@ void Board::makeMove(int row, int column, string side)
         cout<<"Invalid move please try again"<<endl;
         return; //Return so that the null adj is not addedToMSquares
     }
-    isSolved();
 }
 
 void Board::makeGrid()

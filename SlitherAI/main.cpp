@@ -109,15 +109,17 @@ void startGame(Board *b)
     {
         keepMoving = promptForMove(b);
 
-        if(b->isSolved())
+        if(b->areSquaresValid())
         {
-            cout<<endl<<" YOU HAVE FOUND A SOLUTION! CONGRATULATIONS!!!!"<<endl<<endl;
-            keepMoving = false;
-        }
-        else
-        {
-            if(b->areSquaresValid())
+            if(b->isContLoop())
+            {
+                cout<<endl<<" YOU HAVE FOUND A SOLUTION! CONGRATULATIONS!!!!"<<endl<<endl;
+                keepMoving = false;
+            }
+            else
+            {
                 cout<<endl<<" SORRY THAT IS NOT A SOLUTION!"<<endl;
+            }
         }
     }
 }
