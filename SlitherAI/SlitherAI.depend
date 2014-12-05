@@ -1,11 +1,12 @@
 # depslib dependency file v1.0
-1417754212 source:c:\users\chris\documents\slither\slitherai\main.cpp
+1417818027 source:c:\users\chris\documents\slither\slitherai\main.cpp
 	<iostream>
 	<fstream>
 	<string>
 	"Square.h"
 	"ArrayList.h"
 	"Board.h"
+	"BoardSolver.h"
 
 1414195237 c:\users\chris\documents\slither\slitherai\include\square.h
 	<string>
@@ -18,7 +19,7 @@
 1413644530 source:c:\users\chris\documents\slither\slitherai\src\arraylist.cpp
 	"ArrayList.h"
 
-1417448330 c:\users\chris\documents\slither\slitherai\include\arraylist.h
+1417822231 c:\users\chris\documents\slither\slitherai\include\arraylist.h
 
 1417814489 c:\users\chris\documents\slither\slitherai\include\board.h
 	"ArrayList.h"
@@ -45,9 +46,10 @@
 1416764139 source:c:\users\chris\documents\slither\slitherai\src\edge.cpp
 	"Edge.h"
 
-1417809049 source:c:\users\chris\documents\slither\slitherai\src\boardsolver.cpp
+1417821113 source:c:\users\chris\documents\slither\slitherai\src\boardsolver.cpp
 	"BoardSolver.h"
+	<iostream>
 
-1417809093 c:\users\chris\documents\slither\slitherai\include\boardsolver.h
+1417820973 c:\users\chris\documents\slither\slitherai\include\boardsolver.h
 	"Board.h"
 

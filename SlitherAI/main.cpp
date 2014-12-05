@@ -4,6 +4,7 @@
 #include "Square.h"
 #include "ArrayList.h"
 #include "Board.h"
+#include "BoardSolver.h"
 
 using namespace std;
 
@@ -101,7 +102,7 @@ bool promptForMove(Board* b)
     return true;
 }
 
-void startGame(Board *b)
+void startUserGame(Board *b)
 {
     //Move loop
     bool keepMoving = true;
@@ -123,6 +124,22 @@ void startGame(Board *b)
         }
     }
 }
+
+void userPlay(Board* b)
+{
+     b->drawBoard();
+    cout<<"Begin making moves (use 0 0 X to end)"<<endl;
+    startUserGame(b);
+}
+
+void computerPlay(Board* b)
+{
+    b->drawBoard();
+    BoardSolver solver = BoardSolver();
+
+    solver.findSolution(b);
+    solver.showBestSolution();
+}
 int main()
 {
     //Description
@@ -134,37 +151,43 @@ int main()
     cout<<"NOTE: You must input the path for the grid files"<<endl<<" \t(see README.txt for proper format of data files)"<<endl<<endl;
     cout<<"Good luck!!!"<<endl<<endl;
 
-    //Read initial grid
-    string filePath;
-    cout<<"Please enter grid filepath: ";
-    cin>>filePath;
 
-    //Create and draw initial board
-    Board* b = parseBoardFile(filePath);
-    b->drawBoard();
-
-    //Game loop
+     //Game loop
     bool keepPlaying = true;
-    cout<<"Begin making moves (use 0 0 X to end)"<<endl;
     while(keepPlaying)
     {
-        startGame(b);
+        //Read initial grid
+        string filePath;
+        cout<<"Please enter grid filepath: ";
+        cin>>filePath;
+
+        //Create initial board
+        Board* b = parseBoardFile(filePath);
+
+        string mode;
+        cout<<"Computer or Human Play? (C/H): ";
+        cin>>mode;
+
+        if(mode=="C")
+            computerPlay(b);
+        else if(mode=="H")
+            userPlay(b);
+        else
+            cout<<"Invalid Entry"<<endl;
+
         string pAgain;
         cout<<endl<<"Would you like to play again? (Y/N): ";
         cin>> pAgain;
         if(pAgain != "Y")
         {
             cout<<endl<<"Exiting game!"<<endl;
+            keepPlaying = false;
             return 0;
         }
         else
         {
-            string filePath;
-            cout<<endl<<endl<<"Please enter grid filepath: ";
-            cin>>filePath;
-
-            b = parseBoardFile(filePath);
-            b->drawBoard();
+            keepPlaying = true;
+            cout<<endl<<endl;
         }
     }
 

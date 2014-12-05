@@ -40,9 +40,9 @@ class ArrayList
         int size;
         int maxSize;
         int nextIndex; //The next available location in the array
-        T* newArr;
         void expandArray()
         {
+            T* newArr;
             maxSize = maxSize *2;
             newArr = new T[maxSize];
             for(int i =0; i < nextIndex; i++)

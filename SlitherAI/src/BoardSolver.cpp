@@ -1,5 +1,7 @@
 #include "BoardSolver.h"
 #include <iostream>
+
+
 using namespace std;
 BoardSolver::BoardSolver()
 {
@@ -26,12 +28,13 @@ void BoardSolver::showBestSolution()
 
     //Mark the board
     if(bestSolution != NULL)
+    {
         markBoardWithSolution(b, *bestSolution);
+        //Display the board
+        b->drawBoard();
+    }
     else
         cout<<"A solution to the board has not been found yet"<<endl;
-
-    //Display the board
-    b->drawBoard();
 
     //Message concerning whether or not this is the true solution
     if(trueSolutionFound)
@@ -46,23 +49,63 @@ void BoardSolver::showBestSolution()
 void BoardSolver::findSolution(Board* b)
 {
     //Initializations
-    int numBoardPoints = (b->getHeight()+1)*(b->getWidth()+1);
     sPoint startPoint = sPoint(0,0, true);
     ArrayList<sPoint> visitedPoints = ArrayList<sPoint>();
-    visitedPoints.add(startPoint);
+    //visitedPoints.add(startPoint);
 
-    //tryPoint(startPoint, visitedPoints, numBoardPoints);
+    tryPoint(startPoint, "T", visitedPoints, b->getHeight(), b->getWidth());
 
 }
 
 //Still need to edit this method
-void BoardSolver::tryPoint(sPoint p, ArrayList<sPoint> visitedPoints, int numBoardPoints)
+void BoardSolver::tryPoint(sPoint p, string prevDir, ArrayList<sPoint> visitedPoints, int boardHeight, int boardWidth)
 {
+    //Base case when all points have been checked
+    int numBoardPoints = (boardHeight +1) * (boardWidth+1);
     if(visitedPoints.Getsize() >= numBoardPoints)
     {
         checkForSolution(visitedPoints);
         return;
     }
+
+    //Prevent adding duplicate points to visitedPoints to prevent infinite loop
+    if(visitedPoints.find(p) == -1)
+    {
+        visitedPoints.add(p);
+        cout<<"Added Point: "<<p.row<<" "<<p.column<<endl;
+    }
+    else
+    {
+        cout<<"Found Point: "<<p.row<<" "<<p.column<<endl;
+        return;
+    }
+
+
+    //Recursive steps
+    int row = p.row;
+    int column = p.column;
+
+    if(row+1 < boardHeight+1 && prevDir != "B")
+    {
+        sPoint bottomN = sPoint(row+1, column, true);
+        tryPoint(bottomN, "T", visitedPoints, boardHeight, boardWidth);
+    }
+    if(row -1 > 0 && prevDir !="T")
+    {
+         sPoint topN = sPoint(row-1, column, true);
+         tryPoint(topN, "B", visitedPoints, boardHeight, boardWidth);
+    }
+    if(column+1 < boardWidth+1 && prevDir != "R")
+    {
+        sPoint rightN = sPoint(row, column+1, true);
+        tryPoint(rightN, "L", visitedPoints, boardHeight, boardWidth);
+    }
+    if(column -1 > 0 && prevDir != "L")
+    {
+         sPoint leftN = sPoint(row, column-1, true);
+         tryPoint(leftN, "R", visitedPoints, boardHeight, boardWidth);
+    }
+
 }
 
 //This method checks if input points form a solution and if not, it will assign it to best solution if it is better than current best solution
