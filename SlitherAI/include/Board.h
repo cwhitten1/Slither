@@ -19,6 +19,7 @@ class Board
         void drawBoard();// Draws the board based on the grid.
         Square** getGrid() {return grid;} //Makes a 2d array based on squares values.
         bool isContLoop(); // Returns true if loop is continuous
+        ArrayList<Square>& getInitSquares(){return initialSquares;}
     protected:
     private:
         int width;

@@ -17,7 +17,6 @@ Board::Board(int w, int h, ArrayList<Square>& sq)
 
 Board::~Board()
 {
-    initialSquares.~ArrayList();
 }
 
 bool Board::isContLoop()
