@@ -11,20 +11,22 @@ BoardSolver::BoardSolver()
 }
 BoardSolver::BoardSolver(Board* b)
 {
-    BoardSolver();
+    trueSolutionFound = false;
+    solutionAttempted = false;
+    bestSolution = new ArrayList<sPoint>();
+    visitedPoints = new ArrayList<sPoint>();
     this->b = b;
 }
 BoardSolver::~BoardSolver()
 {
-    //delete bestSolution;
 }
 
 void BoardSolver::showBestSolution()
 {
     //Mark the board
-    if(bestSolution != NULL)
+    if(bestSolution->Getsize() > 0)
     {
-        markBoardWithSolution(*bestSolution);
+        markBoardWithSolution(bestSolution);
         //Display the board
         b->drawBoard();
     }
@@ -36,8 +38,6 @@ void BoardSolver::showBestSolution()
         cout<<"This is the true solution"<<endl;
     else
         cout<<"This is not the true solution"<<endl;
-
-    delete b;
 }
 
 //This method is the caller of the recursive tryPoint function
@@ -57,9 +57,10 @@ void BoardSolver::tryPoint(sPoint p, string prevDir, int boardHeight, int boardW
 {
     //Base case when all points have been checked
     int numBoardPoints = (boardHeight +1) * (boardWidth+1);
+    //cout<<visitedPoints->Getsize()<<endl;
     if(visitedPoints->Getsize() >= numBoardPoints)
     {
-        checkForSolution(*visitedPoints);
+        checkForSolution(visitedPoints);
         return;
     }
 
@@ -69,62 +70,62 @@ void BoardSolver::tryPoint(sPoint p, string prevDir, int boardHeight, int boardW
     {
         visitedPoints->add(p);
         cout<<"Added Point: "<<p.row<<" "<<p.column<<endl;
+
+        //Recursive steps
+        int row = p.row;
+        int column = p.column;
+
+        if(row+1 < boardHeight+1 && prevDir != "B" && !trueSolutionFound)
+        {
+            sPoint bottomN = sPoint(row+1, column, true);
+            tryPoint(bottomN, "T", boardHeight, boardWidth);
+        }
+        if(row -1 >= 0 && prevDir !="T" && !trueSolutionFound)
+        {
+             sPoint topN = sPoint(row-1, column, true);
+             tryPoint(topN, "B", boardHeight, boardWidth);
+        }
+        if(column+1 < boardWidth+1 && prevDir != "R" && !trueSolutionFound)
+        {
+            sPoint rightN = sPoint(row, column+1, true);
+            tryPoint(rightN, "L", boardHeight, boardWidth);
+        }
+        if(column -1 >= 0 && prevDir != "L" && !trueSolutionFound)
+        {
+             sPoint leftN = sPoint(row, column-1, true);
+             tryPoint(leftN, "R", boardHeight, boardWidth);
+        }
+
+        //Remove the point from visited points once we have fully evaluated it
+        visitedPoints->remove(visitedPoints->find(p));
     }
     else
     {
         cout<<"Found Point: "<<p.row<<" "<<p.column<<endl;
         return;
     }
-
-
-    //Recursive steps
-    int row = p.row;
-    int column = p.column;
-
-    if(row+1 < boardHeight+1 && prevDir != "B")
-    {
-        sPoint bottomN = sPoint(row+1, column, true);
-        tryPoint(bottomN, "T", boardHeight, boardWidth);
-    }
-    if(row -1 > 0 && prevDir !="T")
-    {
-         sPoint topN = sPoint(row-1, column, true);
-         tryPoint(topN, "B", boardHeight, boardWidth);
-    }
-    if(column+1 < boardWidth+1 && prevDir != "R")
-    {
-        sPoint rightN = sPoint(row, column+1, true);
-        tryPoint(rightN, "L", boardHeight, boardWidth);
-    }
-    if(column -1 > 0 && prevDir != "L")
-    {
-         sPoint leftN = sPoint(row, column-1, true);
-         tryPoint(leftN, "R", boardHeight, boardWidth);
-    }
-
-    //Remove the point from visited points once we have fully evaluated it
-    visitedPoints->remove(visitedPoints->find(p));
-
 }
 
 //This method checks if input points form a solution and if not, it will assign it to best solution if it is better than current best solution
-void BoardSolver::checkForSolution(ArrayList<sPoint> points)
+void BoardSolver::checkForSolution(ArrayList<sPoint>* points)
 {
-    //Clear board
-    b = new Board(b->getWidth(), b->getHeight(), b->getInitSquares());
+
     markBoardWithSolution(points);
     if(b->isContLoop())
     {
         if(b->areSquaresValid())
         {
-            cout<< points.get(0).row << endl;
             bestSolution = new ArrayList<sPoint>();
             bestSolution->addAll(points);
             trueSolutionFound = true;
         }
         else
         {
-            bool isBetter = challengeBestSolution(b->getNumValidSquares());
+            //If best solution has been defined, challenge it
+            bool isBetter = true;
+            if(bestSolution->Getsize() > 0)
+                bool isBetter = challengeBestSolution(b->getNumValidSquares());
+
             if(isBetter)
             {
                 bestSolution = new ArrayList<sPoint>();
@@ -136,10 +137,7 @@ void BoardSolver::checkForSolution(ArrayList<sPoint> points)
 
 bool BoardSolver::challengeBestSolution(int numValidSquares)
 {
-    //Clear board
-    b = new Board(b->getWidth(), b->getHeight(), b->getInitSquares());
-
-    markBoardWithSolution(*bestSolution);
+    markBoardWithSolution(bestSolution);
     int currNum = b->getNumValidSquares();
 
     if(numValidSquares > currNum)
@@ -151,22 +149,25 @@ bool BoardSolver::challengeBestSolution(int numValidSquares)
         return false; //Return false if best solution is still the best
     }
 }
-void BoardSolver::markBoardWithSolution(ArrayList<sPoint> solutionPoints)
+void BoardSolver::markBoardWithSolution(ArrayList<sPoint>* solutionPoints)
 {
+    //Clear board
+    b->clearBoard();
+
     for(int i = 0; i < b->getWidth(); i++)
     {
         for(int j = 0; j < b->getHeight(); j++)
         {
             //Make point objects
-            int indexLeftP = solutionPoints.find(sPoint(i,j,false)); // Note the false does not matter here due to the way we overloaded the equality operator
-            int indexRightP = solutionPoints.find(sPoint(i,j+1,false));
-            int indexBLeftP = solutionPoints.find(sPoint(i+1,j,false)); // Note the false does not matter here due to the way we overloaded the equality operator
-            int indexBRightP = solutionPoints.find(sPoint(i+1,j+1,false));
+            int indexLeftP = solutionPoints->find(sPoint(i,j,false)); // Note the false does not matter here due to the way we overloaded the equality operator
+            int indexRightP = solutionPoints->find(sPoint(i,j+1,false));
+            int indexBLeftP = solutionPoints->find(sPoint(i+1,j,false)); // Note the false does not matter here due to the way we overloaded the equality operator
+            int indexBRightP = solutionPoints->find(sPoint(i+1,j+1,false));
 
-            sPoint leftP = solutionPoints.get(indexLeftP);
-            sPoint rightP = solutionPoints.get(indexRightP);
-            sPoint bleftP = solutionPoints.get(indexBLeftP);
-            sPoint brightP = solutionPoints.get(indexBRightP);
+            sPoint leftP = solutionPoints->get(indexLeftP);
+            sPoint rightP = solutionPoints->get(indexRightP);
+            sPoint bleftP = solutionPoints->get(indexBLeftP);
+            sPoint brightP = solutionPoints->get(indexBRightP);
 
             //Mark square according to which points are marked
             Square s = b->getGrid()[leftP.row][leftP.column];

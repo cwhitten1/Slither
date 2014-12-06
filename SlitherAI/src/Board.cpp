@@ -266,6 +266,25 @@ void Board::drawBoard()
 }
 
 
+void Board::clearBoard()
+{
+    for(int i = 0; i <height;i++)
+        {
+            for(int j =0; j<width; j++)
+            {
+                Square s = grid[i][j];
+                if(s.Gets_bottom())
+                    s.toggleSide("B");
+                if(s.Gets_top())
+                    s.toggleSide("T");
+                if(s.Gets_left())
+                    s.toggleSide("L");
+                if(s.Gets_right())
+                    s.toggleSide("R");
+            }
+        }
+}
+
 ArrayList<Point> Board::generateMarkedSquares()
 {
     ArrayList<Point> markedSquares = ArrayList<Point>();

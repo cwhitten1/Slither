@@ -20,6 +20,7 @@ class Board
         Square** getGrid() {return grid;} //Makes a 2d array based on squares values.
         bool isContLoop(); // Returns true if loop is continuous
         ArrayList<Square>& getInitSquares(){return initialSquares;}
+        void clearBoard(); //This method removes all marked edges from the board.
     protected:
     private:
         int width;

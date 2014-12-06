@@ -19,9 +19,9 @@ class BoardSolver
         Board* b;
         ArrayList<sPoint>*  bestSolution;
         ArrayList<sPoint>*  visitedPoints;
-        void markBoardWithSolution(ArrayList<sPoint> solutionPoints); //This method will mark the squares of the input board
+        void markBoardWithSolution(ArrayList<sPoint>* solutionPoints); //This method will mark the squares of the input board
         void tryPoint(sPoint p, string prevDir,int boardHeight, int boardWidth);
-        void checkForSolution(ArrayList<sPoint> points);
+        void checkForSolution(ArrayList<sPoint>* points);
         bool challengeBestSolution(int numValidSquares); //Challenge only checks for number of valid squares not continuous loop
 };
 

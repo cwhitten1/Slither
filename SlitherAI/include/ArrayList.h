@@ -34,11 +34,11 @@ class ArrayList
                 size--;
                 nextIndex--;
             }
-        void addAll(ArrayList<T> inlist)
+        void addAll(ArrayList<T>* inlist)
         {
-            for(int i = 0; i < inlist.Getsize(); i++)
+            for(int i = 0; i < inlist->Getsize(); i++)
             {
-                add(inlist.get(i));
+                add(inlist->get(i));
             }
         }
     protected:
