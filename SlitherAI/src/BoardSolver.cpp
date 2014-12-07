@@ -124,7 +124,7 @@ void BoardSolver::checkForSolution(ArrayList<sPoint>* points)
             //If best solution has been defined, challenge it
             bool isBetter = true;
             if(bestSolution->Getsize() > 0)
-                bool isBetter = challengeBestSolution(b->getNumValidSquares());
+                isBetter = challengeBestSolution(b->getNumValidSquares());
 
             if(isBetter)
             {
@@ -173,13 +173,13 @@ void BoardSolver::markBoardWithSolution(ArrayList<sPoint>* solutionPoints)
             Square s = b->getGrid()[leftP.row][leftP.column];
 
             if(leftP.isMarked && rightP.isMarked && !s.Gets_top())
-                s.toggleSide("T");
+                grid[leftP.row][leftP.column].toggleSide("T");
             if(leftP.isMarked && bleftP.isMarked && !s.Gets_left())
-                s.toggleSide("L");
+                grid[leftP.row][leftP.column].toggleSide("L");
             if(brightP.isMarked && rightP.isMarked && !s.Gets_right())
-                s.toggleSide("R");
+                grid[leftP.row][leftP.column].toggleSide("R");
             if(brightP.isMarked && bleftP.isMarked && !s.Gets_bottom())
-                s.toggleSide("B");
+                grid[leftP.row][leftP.column].toggleSide("B");
         }
     }
 }

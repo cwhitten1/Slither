@@ -89,6 +89,7 @@ bool promptForMove(Board* b)
         else
         {
             b->makeMove(row, column, side);
+            b->drawBoard();
             return true;
         }
 

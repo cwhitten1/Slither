@@ -109,8 +109,6 @@ void Board::makeMove(int row, int column, string side)
             adj = &(grid[row][column -1]);
             adj->toggleSide("R");
         }
-
-        drawBoard();
     }
     else if(side == "R")
     {
@@ -122,8 +120,6 @@ void Board::makeMove(int row, int column, string side)
             adj = &(grid[row][column +1]);
             adj->toggleSide("L");
         }
-
-        drawBoard();
     }
     else if(side == "T")
     {
@@ -135,8 +131,6 @@ void Board::makeMove(int row, int column, string side)
             adj = &(grid[row - 1][column]);
             adj->toggleSide("B");
         }
-
-        drawBoard();
     }
     else if(side == "B")
     {
@@ -148,8 +142,6 @@ void Board::makeMove(int row, int column, string side)
            adj = &(grid[row +1][column]);
            adj->toggleSide("T");
         }
-
-        drawBoard();
     }
     else
     {
@@ -274,13 +266,13 @@ void Board::clearBoard()
             {
                 Square s = grid[i][j];
                 if(s.Gets_bottom())
-                    s.toggleSide("B");
+                    grid[i][j].toggleSide("B");
                 if(s.Gets_top())
-                    s.toggleSide("T");
+                    grid[i][j].toggleSide("T");
                 if(s.Gets_left())
-                    s.toggleSide("L");
+                    grid[i][j].toggleSide("L");
                 if(s.Gets_right())
-                    s.toggleSide("R");
+                    grid[i][j].toggleSide("R");
             }
         }
 }
