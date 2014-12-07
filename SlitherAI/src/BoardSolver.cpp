@@ -170,16 +170,16 @@ void BoardSolver::markBoardWithSolution(ArrayList<sPoint>* solutionPoints)
             sPoint brightP = solutionPoints->get(indexBRightP);
 
             //Mark square according to which points are marked
-            Square s = b->getGrid()[leftP.row][leftP.column];
+            Square* s = &(b->getGrid()[leftP.row][leftP.column]);
 
-            if(leftP.isMarked && rightP.isMarked && !s.Gets_top())
-                grid[leftP.row][leftP.column].toggleSide("T");
-            if(leftP.isMarked && bleftP.isMarked && !s.Gets_left())
-                grid[leftP.row][leftP.column].toggleSide("L");
-            if(brightP.isMarked && rightP.isMarked && !s.Gets_right())
-                grid[leftP.row][leftP.column].toggleSide("R");
-            if(brightP.isMarked && bleftP.isMarked && !s.Gets_bottom())
-                grid[leftP.row][leftP.column].toggleSide("B");
+            if(leftP.isMarked && rightP.isMarked && !s->Gets_top())
+                s->toggleSide("T");
+            if(leftP.isMarked && bleftP.isMarked && !s->Gets_left())
+                s->toggleSide("L");
+            if(brightP.isMarked && rightP.isMarked && !s->Gets_right())
+                s->toggleSide("R");
+            if(brightP.isMarked && bleftP.isMarked && !s->Gets_bottom())
+                s->toggleSide("B");
         }
     }
 }

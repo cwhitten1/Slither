@@ -70,7 +70,7 @@ bool Board::areSquaresValid()
             Square s = grid[i][j];
             if((s.GetisValid()) == false)
             {
-                cout<<"Invalid square: "<<i<< " "<< j<<endl;
+                //cout<<"Invalid square: "<<i<< " "<< j<<endl;
                 return false;
             }
         }
