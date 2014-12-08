@@ -6,9 +6,9 @@ using namespace std;
 Board::Board()
 {
 }
-Board::Board(int w, int h, ArrayList<Square>& sq)
+Board::Board(int w, int h, const ArrayList<Square>& sq)
 {
-    initialSquares = sq;
+    initialSquares=sq;
     width=w;
     height=h;
 

@@ -12,5 +12,4 @@ Edge::Edge(Point p1, Point p2)
 
 Edge::~Edge()
 {
-    //dtor
 }

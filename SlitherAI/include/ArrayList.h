@@ -42,6 +42,13 @@ class ArrayList
                 add(inlist->get(i));
             }
         }
+        void addAll(ArrayList<T> inlist)
+        {
+            for(int i = 0; i < inlist.Getsize(); i++)
+            {
+                add(inlist.get(i));
+            }
+        }
     protected:
         T* values;
     private:

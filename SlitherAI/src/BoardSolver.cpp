@@ -10,7 +10,7 @@ BoardSolver::BoardSolver()
     trueSolutionFound = false;
     solutionAttempted = false;
 }
-BoardSolver::BoardSolver(Board* b)
+BoardSolver::BoardSolver(Board b)
 {
     finalSolution.reserve(10);
     solutionArray.reserve(10);
@@ -35,9 +35,7 @@ vector<Edge> BoardSolver::findSolution()
 
     tryEdge(e, true, "T", startPoint, visitedPoints);
     solutionAttempted = true;
-    if(trueSolutionFound)
-        markBoardWithSolution(finalSolution);
-    return finalSolution;
+    return solutionArray;
 }
 
 //Still need to edit this method
@@ -61,7 +59,6 @@ bool BoardSolver::tryEdge(Edge e, bool p1isStart, string prevDir, Point destPoin
 
 
     //Add edge to solution array prematurely but remember the index where we put it
-    int edgeIndex = solutionArray.size();
     solutionArray.push_back(e);
 
 
@@ -69,10 +66,12 @@ bool BoardSolver::tryEdge(Edge e, bool p1isStart, string prevDir, Point destPoin
     cout<< solutionArray.size()<<endl;
     if(leadPoint == destPoint && solutionArray.size() >= 2)
     {
+        cout<<"Checking for solution"<<endl;
         bool solved = checkForSolution(solutionArray);
         if(solved)
             finalSolution = solutionArray;
-        solutionArray.erase(solutionArray.begin()+edgeIndex-1);
+        solutionArray.pop_back();
+        cout<<"returned"<<endl;
         return solved;
     }
 
@@ -80,7 +79,8 @@ bool BoardSolver::tryEdge(Edge e, bool p1isStart, string prevDir, Point destPoin
     if(find(visitedPoints.begin(), visitedPoints.end(), leadPoint) != visitedPoints.end())
     {
         cout<<"Already have point "<<leadPoint.row<<" "<<leadPoint.column<<" in stack"<< endl;
-        solutionArray.erase(solutionArray.begin()+edgeIndex-1);
+        solutionArray.pop_back();
+        cout<<"returned"<<endl;
         return false;
     }
     else
@@ -96,7 +96,7 @@ bool BoardSolver::tryEdge(Edge e, bool p1isStart, string prevDir, Point destPoin
         Edge e = Edge(leadPoint, topN);
         solved = tryEdge(e, true, "B", destPoint, visitedPoints);
     }
-    if(row+1 < b->getHeight()+1  && !solved && prevDir != "B")
+    if(row+1 < b.getHeight()+1  && !solved && prevDir != "B")
     {
         Point bottomN = Point(row+1,column);
         Edge e = Edge(leadPoint, bottomN);
@@ -108,25 +108,26 @@ bool BoardSolver::tryEdge(Edge e, bool p1isStart, string prevDir, Point destPoin
         Edge e = Edge(leadPoint, leftN);
         solved = tryEdge(e, true, "R", destPoint, visitedPoints);
     }
-    if(column+1 < b->getWidth()+1 && !solved && prevDir != "R")
+    if(column+1 < b.getWidth()+1 && !solved && prevDir != "R")
     {
         Point rightN = Point(row,column+1);
         Edge e = Edge(leadPoint, rightN);
         solved = tryEdge(e, true, "L", destPoint, visitedPoints);
     }
 
-    solutionArray.erase(solutionArray.begin()+edgeIndex-1);
+    solutionArray.pop_back();
+    cout<<"returned"<<endl;
     return solved;
 }
 
 //This method checks if input points form a solution and if not, it will assign it to best solution if it is better than current best solution
 bool BoardSolver::checkForSolution(vector<Edge> solutionArray)
 {
-
     markBoardWithSolution(solutionArray);
-    if(b->isContLoop())
+    cout<<b.isContLoop()<<endl;
+    if(b.isContLoop())
     {
-        if(b->areSquaresValid())
+        if(b.areSquaresValid())
         {
             trueSolutionFound = true;
             return true;
@@ -142,8 +143,11 @@ bool BoardSolver::checkForSolution(vector<Edge> solutionArray)
 
 void BoardSolver::markBoardWithSolution(vector<Edge> edges)
 {
+    //If we have already found the solution, don't bother.
+    if(trueSolutionFound)
+        return;
     //Clear board
-    b->clearBoard();
+    b.clearBoard();
 
     for(unsigned i = 0; i < edges.size(); i++)
     {
@@ -171,27 +175,22 @@ void BoardSolver::markBoardWithSolution(vector<Edge> edges)
         if(p1.row==p2.row)
         {
             //Check for when edge is on the very bottom
-            if(sqRow < b->getHeight())
-                b->makeMove(sqRow,sqCol,"T");
+            if(sqRow < b.getHeight())
+                b.makeMove(sqRow,sqCol,"T");
             else
-                b->makeMove(sqRow-1, sqCol, "B");
+                b.makeMove(sqRow-1, sqCol, "B");
         }
 
         else if(p1.column == p2.column)
         {
             //Check for when edge is on the far right
-            if(sqCol < b->getWidth())
-                b->makeMove(sqRow, sqCol, "L");
+            if(sqCol < b.getWidth())
+                b.makeMove(sqRow, sqCol, "L");
             else
-                b->makeMove(sqRow, sqCol-1, "R");
+                b.makeMove(sqRow, sqCol-1, "R");
         }
 
         else
             cout<<"Bad edge found when marking board"<<endl;
     }
-}
-
-void BoardSolver::setBoard(Board* b)
-{
-    this->b = b;
 }

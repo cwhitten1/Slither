@@ -8,7 +8,7 @@ class Board
 {
     public:
         Board();
-        Board(int width, int height, ArrayList<Square>& initialSquares);
+        Board(int width, int height, const ArrayList<Square>& initialSquares);
         virtual ~Board();
         int getWidth(){ return width;}
         int getHeight(){ return height;}
@@ -20,9 +20,8 @@ class Board
         void drawBoard();// Draws the board based on the grid.
         Square** getGrid() {return grid;} //Makes a 2d array based on squares values.
         bool isContLoop(); // Returns true if loop is continuous
-        ArrayList<Square>& getInitSquares(){return initialSquares;}
+        ArrayList<Square> getInitSquares(){return initialSquares;}
         void clearBoard(); //This method removes all marked edges from the board.
-        void setGrid(Square** grid);
     protected:
     private:
         int width;
