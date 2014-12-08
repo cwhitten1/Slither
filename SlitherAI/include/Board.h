@@ -14,6 +14,7 @@ class Board
         int getHeight(){ return height;}
         bool areSquaresValid(); //Checks if all squares have a valid # of edges.
         int getNumValidSquares();
+        int getNumEdges();
         bool checkForCrosses(Square s); //Checks if the marked edges of squares form a continuous loop.
         void makeMove(int row, int column, string side);
         void drawBoard();// Draws the board based on the grid.
@@ -21,6 +22,7 @@ class Board
         bool isContLoop(); // Returns true if loop is continuous
         ArrayList<Square>& getInitSquares(){return initialSquares;}
         void clearBoard(); //This method removes all marked edges from the board.
+        void setGrid(Square** grid);
     protected:
     private:
         int width;

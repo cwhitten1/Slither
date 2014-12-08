@@ -42,6 +42,7 @@
 		<Unit filename="include/Edge.h" />
 		<Unit filename="include/Point.h" />
 		<Unit filename="include/Square.h" />
+		<Unit filename="include/sPoint.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/ArrayList.cpp" />
 		<Unit filename="src/Board.cpp" />
@@ -49,6 +50,7 @@
 		<Unit filename="src/Edge.cpp" />
 		<Unit filename="src/Point.cpp" />
 		<Unit filename="src/Square.cpp" />
+		<Unit filename="src/sPoint.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

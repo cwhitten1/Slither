@@ -31,6 +31,7 @@ class ArrayList
             {
                 for(int i = index+1; i <size; i++)
                     values[i-1] = values[i];
+                values[size-1] = T();//Clear the value in memory
                 size--;
                 nextIndex--;
             }

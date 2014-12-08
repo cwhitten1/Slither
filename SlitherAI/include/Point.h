@@ -12,7 +12,7 @@ class Point
         int row;
         int column;
         Point findNeighbor(string direction); //Use "l/r/t/b"
-        bool operator== (Point &p2){return (row == p2.row && column == p2.column);};//Override equality operator
+        bool operator== (const Point& p2){return (row == p2.row && column == p2.column);};//Override equality operator
     protected:
     private:
 };

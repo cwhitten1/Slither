@@ -139,6 +139,7 @@ void computerPlay(Board* b)
     BoardSolver solver = BoardSolver(b);
 
     solver.findSolution();
+    b->drawBoard();
 }
 int main()
 {

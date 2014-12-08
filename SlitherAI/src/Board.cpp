@@ -25,8 +25,12 @@ bool Board::isContLoop()
     ArrayList<Edge> markedEdges = generateMarkedEdges(markedSquares);
     ArrayList<Point> edgePoints = ArrayList<Point>();
 
+    int loopCounter = 0; //This variable keeps track of the number of continuous loops in the board
     for(int i = 0; i < markedEdges.Getsize(); i++)
     {
+        if(edgePoints.Getsize() == 0)
+            loopCounter++;
+
         Edge e = markedEdges.get(i);
         //cout<< "Edge " << i <<endl;
         //If point 1 has not been added, add it, else remove it
@@ -55,7 +59,7 @@ bool Board::isContLoop()
             //cout<<"Removed point: "<< e.Getp2().row <<" "<<e.Getp2().column<<endl;
         }
     }
-    if(edgePoints.Getsize() > 0)
+    if(edgePoints.Getsize() > 0 || loopCounter != 1)
         return false;
     else
         return true;
@@ -93,6 +97,11 @@ int Board::getNumValidSquares()
     }
 
     return num;
+}
+
+int Board::getNumEdges()
+{
+    return height*(width+1) + width*(height+1);
 }
 
 void Board::makeMove(int row, int column, string side)

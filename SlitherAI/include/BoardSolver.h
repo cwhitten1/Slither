@@ -2,6 +2,7 @@
 #define BOARDSOLVER_H
 #include "Board.h"
 #include "sPoint.h"
+#include <vector>
 
 class BoardSolver
 {
@@ -9,20 +10,18 @@ class BoardSolver
         BoardSolver();
         BoardSolver(Board* b);
         virtual ~BoardSolver();
-        void findSolution();
-        void showBestSolution();
+        vector<Edge> findSolution();
         void setBoard(Board* b);
     protected:
     private:
         bool trueSolutionFound;
         bool solutionAttempted;
+        vector<Edge> solutionArray;
+        vector<Edge> finalSolution;
         Board* b;
-        ArrayList<sPoint>*  bestSolution;
-        ArrayList<sPoint>*  visitedPoints;
-        void markBoardWithSolution(ArrayList<sPoint>* solutionPoints); //This method will mark the squares of the input board
-        void tryPoint(sPoint p, string prevDir,int boardHeight, int boardWidth);
-        void checkForSolution(ArrayList<sPoint>* points);
-        bool challengeBestSolution(int numValidSquares); //Challenge only checks for number of valid squares not continuous loop
+        void markBoardWithSolution(vector<Edge> edges); //This method will mark the squares of the input board
+        bool tryEdge(Edge e, bool p1isStart, string prevDir, Point destPoint, vector<Point> visitedPoints);
+        bool checkForSolution(vector<Edge> solutionArray);
 };
 
 #endif // BOARDSOLVER_H
