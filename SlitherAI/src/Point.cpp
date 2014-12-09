@@ -21,7 +21,7 @@ Point::~Point()
 
 Point Point::findNeighbor(string direction)
 {
-    Point p;
+    Point p = Point(-1,-1);
 
     if(direction == "l")
     {
@@ -46,8 +46,5 @@ Point Point::findNeighbor(string direction)
     else
         cout<<"Invalid point direction"<<endl;
 
-    if((p.row <= 0) || (p.column <= 0))
-        throw new exception();
-    else
-        return p;
+    return p;
 }

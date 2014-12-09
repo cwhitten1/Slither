@@ -157,8 +157,8 @@ Edge BoardSolver::determineStartEdge()
 
 bool BoardSolver::isSolutionStillPossible(vector<Point> visitedPoints, Point destPoint, Point currPoint)
 {
-    int height = b.getHeight();
-    int width = b.getWidth();
+    int height = b.getHeight()+1;
+    int width = b.getWidth()+1;
     //Assume destPoint is above and to the left of currPoint
     bool destBelow = false; //Flag for if destination point is below current point
     bool destRight = false; //Flag for if destination point is to the right of the current point
@@ -173,23 +173,23 @@ bool BoardSolver::isSolutionStillPossible(vector<Point> visitedPoints, Point des
     {
         bool lineFormed = false;
         //Check for horizontal "lines" which prevent reaching a solution
-        lineFormed = checkForLinesFormed(destPoint.row, currPoint.row, destPoint.column, width, visitedPoints);
+        lineFormed = checkForLinesFormed(destPoint.row+1, currPoint.row, 0, width, visitedPoints);
         if(lineFormed)
             return false;
 
         //Check for vertical "lines" which prevent reaching a solution
-        lineFormed =checkForLinesFormed(destPoint.column, currPoint.column, destPoint.row, height, visitedPoints);
+        lineFormed =checkForLinesFormed(destPoint.column+1, currPoint.column, 0, height, visitedPoints);
         if(lineFormed)
             return false;
 
         //Check for "boxes" which box in the destination point
-        int hLineRow = checkForLinesFormed(destPoint.row, currPoint.row, destPoint.column, currPoint.column, visitedPoints, true);
+        /*int hLineRow = checkForLinesFormed(destPoint.row+1, currPoint.row, 0, currPoint.column, visitedPoints, true);
         if(hLineRow <= b.getHeight()+1)
         {
-            lineFormed = checkForLinesFormed(destPoint.column, currPoint.column, 0, hLineRow, visitedPoints);
+            lineFormed = checkForLinesFormed(destPoint.column+1, currPoint.column, 0, hLineRow, visitedPoints);
             if(lineFormed)
                 return false;
-        }
+        }*/
     }
 
     //If destination point is above and to the right of the current point
@@ -197,16 +197,23 @@ bool BoardSolver::isSolutionStillPossible(vector<Point> visitedPoints, Point des
     {
         bool lineFormed = false;
         //Check for horizontal "lines" which prevent reaching a solution
-        lineFormed = checkForLinesFormed(destPoint.row, currPoint.row, destPoint.column, width, visitedPoints);
+        lineFormed = checkForLinesFormed(destPoint.row+1, currPoint.row, 0, width, visitedPoints);
         if(lineFormed)
             return false;
 
         //Check for vertical "lines" which prevent reaching a solution
-        lineFormed =checkForLinesFormed(currPoint.column, destPoint.column, destPoint.row, height, visitedPoints);
+        lineFormed =checkForLinesFormed(currPoint.column+1, destPoint.column, 0, height, visitedPoints);
         if(lineFormed)
             return false;
 
         //Check for "boxes" which box in the destination point
+        /*int hLineRow = checkForLinesFormed(destPoint.row+1, currPoint.row, currPoint.column+1, width, visitedPoints, true);
+        if(hLineRow <= b.getHeight()+1)
+        {
+            lineFormed = checkForLinesFormed(currPoint.column+1, destPoint.column, 0, hLineRow, visitedPoints);
+            if(lineFormed)
+                return false;
+        }*/
     }
 
     //If destination point is below and to the left of the current point
@@ -214,16 +221,23 @@ bool BoardSolver::isSolutionStillPossible(vector<Point> visitedPoints, Point des
     {
         bool lineFormed = false;
         //Check for horizontal "lines" which prevent reaching a solution
-        lineFormed = checkForLinesFormed(currPoint.row, destPoint.row, destPoint.column, width, visitedPoints);
+        lineFormed = checkForLinesFormed(currPoint.row+1, destPoint.row, 0, width, visitedPoints);
         if(lineFormed)
             return false;
 
         //Check for vertical "lines" which prevent reaching a solution
-        lineFormed =checkForLinesFormed(destPoint.column, currPoint.column, destPoint.row, height, visitedPoints);
+        lineFormed =checkForLinesFormed(destPoint.column+1, currPoint.column, 0, height, visitedPoints);
         if(lineFormed)
             return false;
 
         //Check for "boxes" which box in the destination point
+        /*int hLineRow = checkForLinesFormed(currPoint.row+1, destPoint.row, 0, currPoint.column, visitedPoints,false);
+        if(hLineRow > -1)
+        {
+            lineFormed = checkForLinesFormed(destPoint.column+1, currPoint.column, hLineRow, height,  visitedPoints);
+            if(lineFormed)
+                return false;
+        }*/
 
     }
 
@@ -232,16 +246,23 @@ bool BoardSolver::isSolutionStillPossible(vector<Point> visitedPoints, Point des
     {
         bool lineFormed = false;
         //Check for horizontal "lines" which prevent reaching a solution
-        lineFormed = checkForLinesFormed(currPoint.row, destPoint.row, destPoint.column, width, visitedPoints);
+        lineFormed = checkForLinesFormed(currPoint.row+1, destPoint.row, 0, width, visitedPoints);
         if(lineFormed)
             return false;
 
         //Check for vertical "lines" which prevent reaching a solution
-        lineFormed =checkForLinesFormed(currPoint.column, destPoint.column, destPoint.row, height, visitedPoints);
+        lineFormed =checkForLinesFormed(currPoint.column+1, destPoint.column, 0, height, visitedPoints);
         if(lineFormed)
             return false;
 
         //Check for "boxes" which box in the destination point
+        /* hLineRow = checkForLinesFormed(currPoint.row+1, destPoint.row, currPoint.column +1, width, visitedPoints, false);
+        if(hLineRow > -1)
+        {
+            lineFormed = checkForLinesFormed(destPoint.column+1, currPoint.column, hLineRow, height,  visitedPoints);
+            if(lineFormed)
+                return false;
+        }*/
     }
 
     return true;
@@ -301,22 +322,101 @@ int BoardSolver::checkForLinesFormed(int outerStart, int outerEnd, int innerStar
         return maxPos;
 }
 
+
+bool BoardSolver::doesEdgeInvalidateSquare(Edge e)
+{
+    markBoardWithSolution(solutionArray); //Mark the board with the current solution array
+    Point sq1 = e.get1stSquareCoord();
+    Point sq2 = e.get2ndSquareCoord(b.getHeight(), b.getWidth());
+
+    //Check square one
+    if(sq1.row != -1)
+    {
+        Square s = b.getGrid()[sq1.row][sq1.column];
+        int sideCount = s.GetsideCount();
+        int value = s.Getvalue();
+        if(sideCount == value)
+            return true;
+    }
+
+    //Check square two
+    if(sq2.row != -1)
+    {
+        Square s = b.getGrid()[sq2.row][sq2.column];
+        int sideCount = s.GetsideCount();
+        int value = s.Getvalue();
+        if(sideCount == value)
+            return true;
+    }
+
+    return false;
+}
 //This method is the caller of the recursive tryPoint function
 vector<Edge> BoardSolver::findSolution()
 {
     //Heuristics
     Point startPoint = findMostPromisingPoint();
+    vector<Point> visitedPoints = vector<Point>();
+    visitedPoints.push_back(startPoint); //Need to add start point because recursive algorithm adds the lead points.
+
+    Point leftN = startPoint.findNeighbor("l");
+    Point rightN = startPoint.findNeighbor("r");
+    Point topN = startPoint.findNeighbor("t");
+    Point bottomN = startPoint.findNeighbor("b");
+
     Edge  startEdge = determineStartEdge();
+
+    //Find the initial previous direction
+    string initPrevDir;
+    if(startEdge.getIsHorizontal())
+    {
+        if(startEdge.Getp2().column > startPoint.column)
+            initPrevDir = "R";
+        else
+            initPrevDir = "L";
+    }
+    else
+    {
+         if(startEdge.Getp2().row > startPoint.row)
+            initPrevDir = "B";
+         else
+            initPrevDir = "T";
+    }
+
     //cout<<findPointPromise(startPoint)<<endl;
     //Initializations
     //Point startPoint = Point(0,0);
     //Point startLeadPoint = Point(1,0);
-    Edge e = startEdge;
+    //Edge e = Edge(startPoint, startLeadPoint);
 
-    vector<Point> visitedPoints = vector<Point>();
-    visitedPoints.push_back(startPoint); //Need to add start point because recursive algorithm adds the lead points.
 
-    tryEdge(e, true, "T", startPoint, visitedPoints);
+    tryEdge(startEdge, true, initPrevDir, startPoint, visitedPoints);
+
+    //If couldn't find solution with first edge try alternatives
+    if(!trueSolutionFound && leftN.row != -1)
+    {
+        Edge newE = Edge(startPoint, leftN);
+        if(!(newE == startEdge))
+            tryEdge(newE, true, "R", startPoint, visitedPoints);
+    }
+    if(!trueSolutionFound && rightN.row != -1)
+    {
+        Edge newE = Edge(startPoint, rightN);
+        if(!(newE == startEdge))
+            tryEdge(newE, true, "L", startPoint, visitedPoints);
+    }
+    if(!trueSolutionFound && topN.row != -1)
+    {
+        Edge newE = Edge(startPoint, topN);
+        if(!(newE == startEdge))
+            tryEdge(newE, true, "B", startPoint, visitedPoints);
+    }
+    if(!trueSolutionFound && bottomN.row != -1)
+    {
+        Edge newE = Edge(startPoint, bottomN);
+        if(!(newE == startEdge))
+            tryEdge(newE, true, "T", startPoint, visitedPoints);
+    }
     solutionAttempted = true;
     return solutionArray;
 }
@@ -324,6 +424,9 @@ vector<Edge> BoardSolver::findSolution()
 //Still need to edit this method
 bool BoardSolver::tryEdge(Edge e, bool p1isStart, string prevDir, Point destPoint, vector<Point> visitedPoints)
 {
+    //If adding this edge will invalidate an already existing square, return
+    if(doesEdgeInvalidateSquare(e))
+        return false;
     //The lead point is the point which will be "looking" for another point to form an edge with
     Point leadPoint;
     Point basePoint;
@@ -340,11 +443,11 @@ bool BoardSolver::tryEdge(Edge e, bool p1isStart, string prevDir, Point destPoin
     }
     //cout<<"Lead: "<< leadPoint.row<< " "<<leadPoint.column<<" "<<"Base: "<<basePoint.row<<" "<<basePoint.column<<endl;
     //
-    if(!isSolutionStillPossible(visitedPoints, destPoint, leadPoint))
+    /*if(!isSolutionStillPossible(visitedPoints, destPoint, leadPoint))
     {
         //cout<<"Solution not still possible"<<endl<<"returned"<<endl;
         return false;
-    }
+    }*/
 
 
     //Add edge to solution array prematurely but remember the index where we put it

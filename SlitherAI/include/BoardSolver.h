@@ -31,6 +31,7 @@ class BoardSolver
         //These method check to see if single lines have been formed that prevent reaching the destination point
         bool checkForLinesFormed(int outerStart, int outerEnd, int innerStart, int innerEnd, vector<Point> visitedPoints);
         int checkForLinesFormed(int outerStart, int outerEnd, int innerStart, int innerEnd, vector<Point> visitedPoints, bool returnMin);
+        bool doesEdgeInvalidateSquare(Edge e);
 };
 
 #endif // BOARDSOLVER_H
