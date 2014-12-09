@@ -1,4 +1,10 @@
-2 x 2 (width x height)
-Squares (row, column, value):
+5 x 5 (width x height)
+23773
+37277
+77777
+07737
+77777
 (1,1,3)
-(2,2,3)
+(2,2,2)
+(2,3,3)
+(4,4,3)

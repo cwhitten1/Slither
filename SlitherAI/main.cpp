@@ -5,15 +5,16 @@
 #include "ArrayList.h"
 #include "Board.h"
 #include "BoardSolver.h"
-
+#include <vector>
 using namespace std;
 
-Board* parseBoardFile(string filePath)
+Board parseBoardFile(string filePath)
 {
     int width;
     int height;
-    ArrayList<Square> initialSquares = ArrayList<Square>();
-    Board* board;
+    vector<Square> initialSquares = vector<Square>();
+    Board board;
+    bool assignedBoard = false;
 
     ifstream boardFile;
     boardFile.open(filePath.c_str());
@@ -26,10 +27,20 @@ Board* parseBoardFile(string filePath)
         width =  line.at(0) - '0';
         height =  line.at(4) - '0';
 
-        //Skip lines
-        getline(boardFile, line);
-
         //Load all initialSquares
+        for(int i = 0; i < height; i++)
+        {
+            getline(boardFile, line);
+
+            for(int j=0; j<width;j++)
+            {
+                int value = line.at(j) - '0';
+                if(value != 7)
+                    initialSquares.push_back(Square(value, Point(i,j)));
+            }
+        }
+
+        /*/Load all initialSquares
         while(getline(boardFile, line))
         {
             int row = line.at(1) - '0' - 1; // -1 b/c input start at (1,1) and grid in program starts at (0,0)
@@ -38,12 +49,14 @@ Board* parseBoardFile(string filePath)
 
             Square s = Square(value, Point(row,column));
             initialSquares.add(s);
-        }
-        board = new Board(width, height, initialSquares);
+        }*/
+
+        board = Board(width, height, initialSquares);
+        assignedBoard = true;
     }
     boardFile.close();
 
-    if(board != NULL)
+    if(assignedBoard)
         return board;
     else
     {
@@ -53,7 +66,7 @@ Board* parseBoardFile(string filePath)
 }
 
 
-bool promptForMove(Board* b)
+bool promptForMove(Board b)
 {
     cout<<endl<<"Specify move (row column 'L/R/T/B') (0 0 X to end): ";
 
@@ -81,15 +94,15 @@ bool promptForMove(Board* b)
         if(row == -1 && column == -1 && side == "X")
             return false;
             //Check row and column
-        else if(row >= b->getHeight() || column >= b->getWidth() || row < 0 || column < 0)
+        else if(row >= b.getHeight() || column >= b.getWidth() || row < 0 || column < 0)
         {
             cout<<"Invalid move please try again"<<endl;
             promptForMove(b); //Need to keep making moves (this will be expensive on stack if a massive # of incorrect moves are made)
         }
         else
         {
-            b->makeMove(row, column, side);
-            b->drawBoard();
+            b.makeMove(row, column, side);
+            b.drawBoard();
             return true;
         }
 
@@ -103,7 +116,7 @@ bool promptForMove(Board* b)
     return true;
 }
 
-void startUserGame(Board *b)
+void startUserGame(Board b)
 {
     //Move loop
     bool keepMoving = true;
@@ -111,9 +124,9 @@ void startUserGame(Board *b)
     {
         keepMoving = promptForMove(b);
 
-        if(b->areSquaresValid())
+        if(b.areSquaresValid())
         {
-            if(b->isContLoop())
+            if(b.isContLoop())
             {
                 cout<<endl<<" YOU HAVE FOUND A SOLUTION! CONGRATULATIONS!!!!"<<endl<<endl;
                 keepMoving = false;
@@ -126,17 +139,17 @@ void startUserGame(Board *b)
     }
 }
 
-void userPlay(Board* b)
+void userPlay(Board b)
 {
-     b->drawBoard();
+     b.drawBoard();
     cout<<"Begin making moves (use 0 0 X to end)"<<endl;
     startUserGame(b);
 }
 
-void computerPlay(Board* b)
+void computerPlay(Board b)
 {
-    b->drawBoard();
-    BoardSolver solver = BoardSolver(*b);
+    b.drawBoard();
+    BoardSolver solver = BoardSolver(b);
 
     solver.findSolution();
     solver.getBoard().drawBoard();
@@ -163,7 +176,7 @@ int main()
         cin>>filePath;
 
         //Create initial board
-        Board* b = parseBoardFile(filePath);
+        Board b = parseBoardFile(filePath);
 
         string mode;
         cout<<"Computer or Human Play? (C/H): ";

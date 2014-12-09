@@ -1,12 +1,13 @@
 #include "Board.h"
 #include <iostream>
 #include <stdbool.h>
+#include <algorithm>
 using namespace std;
 
 Board::Board()
 {
 }
-Board::Board(int w, int h, const ArrayList<Square>& sq)
+Board::Board(int w, int h, vector<Square> sq)
 {
     initialSquares=sq;
     width=w;
@@ -170,9 +171,9 @@ void Board::makeGrid()
     fillGrid();
 
     //Add initialSquares to the grid
-    for(int j = 0; j < initialSquares.Getsize();j++)
+    for(unsigned int j = 0; j < initialSquares.size();j++)
     {
-        Square s = initialSquares.get(j);
+        Square s = initialSquares.at(j);
         Point tlCorner = s.Getposition();
         int row = tlCorner.row;
         int column = tlCorner.column;
