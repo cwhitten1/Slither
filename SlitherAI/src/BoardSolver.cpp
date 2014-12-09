@@ -33,13 +33,45 @@ int BoardSolver::findPointPromise(Point p)
     int tl=0, tr=0, bl=0, br=0;
 
     if(i-1>=0 && j-1>=0)
+    {
         tl = b.getGrid()[i-1][j-1].Getvalue();
+        //If the square is blank, it will return -1
+        //But we want no penalty for a blank square.
+        //If the square is zero, there should be a penalty to promise
+        //because we don't choose a point around a zero square
+        if(tl == -1)
+            tl =0;
+        if(tl == 0)
+            tl = -1;
+    }
+
     if(i-1>=0 && j < width)
+    {
         tr = b.getGrid()[i-1][j].Getvalue();
+        if(tr == -1)
+            tr =0;
+        if(tr == 0)
+            tr = -1;
+    }
+
     if(i < height && j-1 >= 0)
+    {
         bl = b.getGrid()[i][j-1].Getvalue();
+        if(bl == -1)
+            bl =0;
+        if(bl == 0)
+            bl = -1;
+    }
+
     if(i<height && j < width)
+    {
         br = b.getGrid()[i][j].Getvalue();
+        if(br == -1)
+            br =0;
+        if(br == 0)
+            br = -1;
+    }
+
 
     return tl+tr+bl+br;
 }
@@ -121,6 +153,65 @@ Edge BoardSolver::determineStartEdge()
 
     return Edge(p, nextP);
 }
+
+
+bool BoardSolver::isSolutionStillPossible(vector<Point> visitedPoints, Point destPoint, Point currPoint)
+{
+    int height = b.getHeight();
+    int width = b.getWidth();
+    //Assume destPoint is above and to the left of currPoint
+    bool destBelow = false; //Flag for if destination point is below current point
+    bool destRight = false; //Flag for if destination point is to the right of the current point
+
+    if(currPoint.row < destPoint.row)
+        destBelow = true;
+    if(currPoint.column < destPoint.column)
+        destRight = true;
+
+    //If destination point is above and to the left of the current point
+    if(!destBelow && !destRight)
+    {
+        bool solutionPoss = false;
+        //Check for horizontal "lines" which prevent reaching a solution
+        solutionPoss = checkForLinesFormed(destPoint.row, currPoint.row, destPoint.column, width, visitedPoints);
+        if(!solutionPoss)
+            return false;
+
+        //Check for vertical "lines" which prevent reaching a solution
+        solutionPoss =checkForLinesFormed(destPoint.column, currPoint.column, destPoint.row, height, visitedPoints);
+        if(!solutionPoss)
+            return false;
+
+        //Check for "boxes" which box in the destination point
+
+    }
+
+    return true;
+
+}
+
+bool BoardSolver::checkForLinesFormed(int outerStart, int outerEnd, int innerStart, int innerEnd, vector<Point> visitedPoints)
+{
+    //For each row above the current point
+    for(int i = outerStart; i < outerEnd; i++)
+    {
+        bool lineFormed = true;
+        //See if a line is formed with all the points
+        for(int j = innerStart; j < innerEnd; j++)
+        {
+            Point target = Point(i,j);
+            //If any of the points int
+            if(find(visitedPoints.begin(), visitedPoints.end(), target) == visitedPoints.end())
+            {
+                lineFormed=false;break;
+            }
+        }
+        if(lineFormed)
+            return false;
+    }
+    return true;
+}
+
 //This method is the caller of the recursive tryPoint function
 vector<Edge> BoardSolver::findSolution()
 {
@@ -159,6 +250,12 @@ bool BoardSolver::tryEdge(Edge e, bool p1isStart, string prevDir, Point destPoin
         basePoint = e.Getp2();
     }
     //cout<<"Lead: "<< leadPoint.row<< " "<<leadPoint.column<<" "<<"Base: "<<basePoint.row<<" "<<basePoint.column<<endl;
+    //
+    if(!isSolutionStillPossible(visitedPoints, destPoint, leadPoint))
+    {
+        //cout<<"Solution not still possible"<<endl<<"returned"<<endl;
+        return false;
+    }
 
 
     //Add edge to solution array prematurely but remember the index where we put it

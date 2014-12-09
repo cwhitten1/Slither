@@ -6,6 +6,7 @@
 #include "Board.h"
 #include "BoardSolver.h"
 #include <vector>
+#include <ctime>
 using namespace std;
 
 Board parseBoardFile(string filePath)
@@ -151,8 +152,14 @@ void computerPlay(Board b)
     b.drawBoard();
     BoardSolver solver = BoardSolver(b);
 
+    clock_t t;
+    t=clock();
+    cout<<"Solving..."<<endl;
     solver.findSolution();
+    t = clock()-t;
+    float xtime = ((float)t)/CLOCKS_PER_SEC;
     solver.getBoard().drawBoard();
+    cout<<"Found solution in "<<xtime<<" seconds."<<endl;
 }
 int main()
 {
