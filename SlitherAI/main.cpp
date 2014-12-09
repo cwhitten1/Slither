@@ -159,7 +159,10 @@ void computerPlay(Board b)
     t = clock()-t;
     float xtime = ((float)t)/CLOCKS_PER_SEC;
     solver.getBoard().drawBoard();
-    cout<<"Found solution in "<<xtime<<" seconds."<<endl;
+    if(solver.getTrueSolutionFound())
+        cout<<"Found solution in "<<xtime<<" seconds."<<endl;
+    else
+        cout<<"Could not find solution in "<<xtime<<" seconds."<<endl;
 }
 int main()
 {

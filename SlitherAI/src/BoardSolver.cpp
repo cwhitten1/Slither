@@ -171,19 +171,77 @@ bool BoardSolver::isSolutionStillPossible(vector<Point> visitedPoints, Point des
     //If destination point is above and to the left of the current point
     if(!destBelow && !destRight)
     {
-        bool solutionPoss = false;
+        bool lineFormed = false;
         //Check for horizontal "lines" which prevent reaching a solution
-        solutionPoss = checkForLinesFormed(destPoint.row, currPoint.row, destPoint.column, width, visitedPoints);
-        if(!solutionPoss)
+        lineFormed = checkForLinesFormed(destPoint.row, currPoint.row, destPoint.column, width, visitedPoints);
+        if(lineFormed)
             return false;
 
         //Check for vertical "lines" which prevent reaching a solution
-        solutionPoss =checkForLinesFormed(destPoint.column, currPoint.column, destPoint.row, height, visitedPoints);
-        if(!solutionPoss)
+        lineFormed =checkForLinesFormed(destPoint.column, currPoint.column, destPoint.row, height, visitedPoints);
+        if(lineFormed)
+            return false;
+
+        //Check for "boxes" which box in the destination point
+        int hLineRow = checkForLinesFormed(destPoint.row, currPoint.row, destPoint.column, currPoint.column, visitedPoints, true);
+        if(hLineRow <= b.getHeight()+1)
+        {
+            lineFormed = checkForLinesFormed(destPoint.column, currPoint.column, 0, hLineRow, visitedPoints);
+            if(lineFormed)
+                return false;
+        }
+    }
+
+    //If destination point is above and to the right of the current point
+    if(!destBelow && destRight)
+    {
+        bool lineFormed = false;
+        //Check for horizontal "lines" which prevent reaching a solution
+        lineFormed = checkForLinesFormed(destPoint.row, currPoint.row, destPoint.column, width, visitedPoints);
+        if(lineFormed)
+            return false;
+
+        //Check for vertical "lines" which prevent reaching a solution
+        lineFormed =checkForLinesFormed(currPoint.column, destPoint.column, destPoint.row, height, visitedPoints);
+        if(lineFormed)
+            return false;
+
+        //Check for "boxes" which box in the destination point
+    }
+
+    //If destination point is below and to the left of the current point
+    if(destBelow && !destRight)
+    {
+        bool lineFormed = false;
+        //Check for horizontal "lines" which prevent reaching a solution
+        lineFormed = checkForLinesFormed(currPoint.row, destPoint.row, destPoint.column, width, visitedPoints);
+        if(lineFormed)
+            return false;
+
+        //Check for vertical "lines" which prevent reaching a solution
+        lineFormed =checkForLinesFormed(destPoint.column, currPoint.column, destPoint.row, height, visitedPoints);
+        if(lineFormed)
             return false;
 
         //Check for "boxes" which box in the destination point
 
+    }
+
+    //If the destination point is below and to the right of the current point
+    if(destBelow && destRight)
+    {
+        bool lineFormed = false;
+        //Check for horizontal "lines" which prevent reaching a solution
+        lineFormed = checkForLinesFormed(currPoint.row, destPoint.row, destPoint.column, width, visitedPoints);
+        if(lineFormed)
+            return false;
+
+        //Check for vertical "lines" which prevent reaching a solution
+        lineFormed =checkForLinesFormed(currPoint.column, destPoint.column, destPoint.row, height, visitedPoints);
+        if(lineFormed)
+            return false;
+
+        //Check for "boxes" which box in the destination point
     }
 
     return true;
@@ -200,16 +258,47 @@ bool BoardSolver::checkForLinesFormed(int outerStart, int outerEnd, int innerSta
         for(int j = innerStart; j < innerEnd; j++)
         {
             Point target = Point(i,j);
-            //If any of the points int
+            //If any of the points are not found, we know a line has not been formed
             if(find(visitedPoints.begin(), visitedPoints.end(), target) == visitedPoints.end())
             {
                 lineFormed=false;break;
             }
         }
         if(lineFormed)
-            return false;
+            return true;
     }
-    return true;
+    return false;
+}
+
+int BoardSolver::checkForLinesFormed(int outerStart, int outerEnd, int innerStart, int innerEnd,
+                                     vector<Point> visitedPoints, bool returnMin)
+{
+    int minPos = b.getHeight()+5; // The closest line found to the origin
+    int maxPos = -1; //The farthest line found to the origin
+    //For each row above the current point
+    for(int i = outerStart; i < outerEnd; i++)
+    {
+        bool lineFormed = true;
+        //See if a line is formed with all the points
+        for(int j = innerStart; j < innerEnd; j++)
+        {
+            Point target = Point(i,j);
+            //If any of the points are not found, we know a line has not been formed
+            if(find(visitedPoints.begin(), visitedPoints.end(), target) == visitedPoints.end())
+            {
+                lineFormed=false;break;
+            }
+        }
+        if(lineFormed && i < minPos)
+            minPos = i;
+        if(lineFormed && i > maxPos)
+            maxPos = i;
+
+    }
+    if(returnMin)
+        return minPos;
+    else
+        return maxPos;
 }
 
 //This method is the caller of the recursive tryPoint function

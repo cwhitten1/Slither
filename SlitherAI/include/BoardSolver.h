@@ -13,6 +13,7 @@ class BoardSolver
         vector<Edge> findSolution();
         void setBoard(Board b){this->b = b;}
         Board getBoard(){return b;}
+        bool getTrueSolutionFound(){return trueSolutionFound;}
     protected:
     private:
         bool trueSolutionFound;
@@ -27,10 +28,9 @@ class BoardSolver
         Point findMostPromisingPoint();
         int findPointPromise(Point p);
         bool isSolutionStillPossible(vector<Point> visitedPoints, Point destPoint, Point currPoint); //Check if a solution can still be found
-        //This method checks to see if single lines have been formed that prevent reaching the destination point
+        //These method check to see if single lines have been formed that prevent reaching the destination point
         bool checkForLinesFormed(int outerStart, int outerEnd, int innerStart, int innerEnd, vector<Point> visitedPoints);
-        //This method checks if there are a combination of lines that box in the destination point
-        bool checkForBoxesFormed(int outerStart, int outerEnd, int innerStart, int innerEnd, vector<Point> visitedPoints);
+        int checkForLinesFormed(int outerStart, int outerEnd, int innerStart, int innerEnd, vector<Point> visitedPoints, bool returnMin);
 };
 
 #endif // BOARDSOLVER_H
