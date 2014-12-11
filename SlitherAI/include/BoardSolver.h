@@ -32,6 +32,7 @@ class BoardSolver
         Edge determineStartEdge(Point p);
         vector<sPoint> getAllPointsPromise();
         Point findMostPromisingPoint();
+        int pointProxToCenter(Point p);
         int findPointPromise(Point p);
         bool isSolutionStillPossible(vector<Point> visitedPoints, Point destPoint, Point currPoint); //Check if a solution can still be found
         //These method check to see if single lines have been formed that prevent reaching the destination point

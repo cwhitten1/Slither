@@ -50,12 +50,13 @@
 1418148869 source:c:\users\chris\documents\slither\slitherai\src\edge.cpp
 	"Edge.h"
 
-1418254361 source:c:\users\chris\documents\slither\slitherai\src\boardsolver.cpp
+1418263270 source:c:\users\chris\documents\slither\slitherai\src\boardsolver.cpp
 	"BoardSolver.h"
 	<iostream>
 	<algorithm>
+	<cmath>
 
-1418253637 c:\users\chris\documents\slither\slitherai\include\boardsolver.h
+1418257804 c:\users\chris\documents\slither\slitherai\include\boardsolver.h
 	"Board.h"
 	"sPoint.h"
 	<vector>

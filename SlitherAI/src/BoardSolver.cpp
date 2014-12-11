@@ -1,6 +1,7 @@
 #include "BoardSolver.h"
 #include <iostream>
 #include <algorithm>
+#include <cmath>
 using namespace std;
 
 BoardSolver::BoardSolver()
@@ -34,6 +35,26 @@ vector<sPoint> BoardSolver::getAllPointsPromise()
         }
     }
     return points;
+
+}
+
+int BoardSolver::pointProxToCenter(Point p)
+{
+    int proximity = (b.getHeight()+b.getWidth())/2;
+
+    int centerR = (b.getHeight())/2;
+    int centerC = (b.getWidth())/2;
+
+    int distR = p.row - centerR;
+    int distC = p.column - centerC;
+
+    if(distR < 0)
+        distR*=-1;
+    if(distC < 0)
+        distC*=-1;
+
+    proximity -= (distR + distC);
+    return proximity;
 
 }
 
@@ -92,7 +113,8 @@ int BoardSolver::findPointPromise(Point p)
     }
 
 
-    return tl+tr+bl+br;
+    int proximity = pointProxToCenter(p);
+    return tl+tr+bl+br+proximity;
 }
 Point BoardSolver::findMostPromisingPoint()
 {
@@ -492,11 +514,11 @@ bool BoardSolver::tryEdge(Edge e, bool p1isStart, string prevDir, Point destPoin
     }
     //cout<<"Lead: "<< leadPoint.row<< " "<<leadPoint.column<<" "<<"Base: "<<basePoint.row<<" "<<basePoint.column<<endl;
     //See if a solution is still possible
-    if(!isSolutionStillPossible(visitedPoints, destPoint, leadPoint))
+    /*if(!isSolutionStillPossible(visitedPoints, destPoint, leadPoint))
     {
         //cout<<"Solution not still possible"<<endl<<"returned"<<endl;
         return false;
-    }
+    }*/
 
     //Add edge to solution array prematurely but remember the index where we put it
     solutionArray.push_back(e);
