@@ -2,19 +2,14 @@
 
 sPoint::sPoint()
 {
-    isMarked = false;
 }
-sPoint::sPoint(int row, int column, bool val)
+sPoint::sPoint(int row, int column, int promise, string id)
 {
     this->row = row;
     this->column = column;
-    setIsMarked(val);
+    this->promise = promise;
+    this->id = id;
 }
 sPoint::~sPoint()
 {
-}
-
-void sPoint::setIsMarked(bool val)
-{
-    isMarked = val;
 }

@@ -36,7 +36,7 @@ Point Point::findNeighbor(string direction)
     else if(direction == "t")
     {
         p.column = column +1;
-        p.row = row -1;
+        p.row = row;
     }
     else if(direction == "b")
     {

@@ -39,7 +39,7 @@
 	<stdbool.h>
 	<algorithm>
 
-1418157810 source:c:\users\chris\documents\slither\slitherai\src\point.cpp
+1418221161 source:c:\users\chris\documents\slither\slitherai\src\point.cpp
 	"Point.h"
 	<iostream>
 	<string>
@@ -50,18 +50,19 @@
 1418148869 source:c:\users\chris\documents\slither\slitherai\src\edge.cpp
 	"Edge.h"
 
-1418158137 source:c:\users\chris\documents\slither\slitherai\src\boardsolver.cpp
+1418254361 source:c:\users\chris\documents\slither\slitherai\src\boardsolver.cpp
 	"BoardSolver.h"
 	<iostream>
 	<algorithm>
 
-1418157589 c:\users\chris\documents\slither\slitherai\include\boardsolver.h
+1418253637 c:\users\chris\documents\slither\slitherai\include\boardsolver.h
 	"Board.h"
 	"sPoint.h"
 	<vector>
 
-1417842298 c:\users\chris\documents\slither\slitherai\include\spoint.h
+1418160999 c:\users\chris\documents\slither\slitherai\include\spoint.h
+	<string>
 
-1417842286 source:c:\users\chris\documents\slither\slitherai\src\spoint.cpp
+1418161008 source:c:\users\chris\documents\slither\slitherai\src\spoint.cpp
 	"sPoint.h"
 

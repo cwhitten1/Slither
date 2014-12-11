@@ -23,8 +23,14 @@ class BoardSolver
         Board b;
         void markBoardWithSolution(vector<Edge> edges); //This method will mark the squares of the input board
         bool tryEdge(Edge e, bool p1isStart, string prevDir, Point destPoint, vector<Point> visitedPoints);
+        bool recurStepTop(Point leadPoint, Point destPoint,vector<Point> visitedPoints);
+        bool recurStepBottom(Point leadPoint, Point destPoint,vector<Point> visitedPoints);
+        bool recurStepLeft(Point leadPoint, Point destPoint,vector<Point> visitedPoints);
+        bool recurStepRight(Point leadPoint, Point destPoint,vector<Point> visitedPoints);
+        vector<sPoint> orderNeighbors(Point leadPoint); //Orders the neighbors of the lead point according to their promise
         bool checkForSolution(vector<Edge> solutionArray);
-        Edge determineStartEdge();
+        Edge determineStartEdge(Point p);
+        vector<sPoint> getAllPointsPromise();
         Point findMostPromisingPoint();
         int findPointPromise(Point p);
         bool isSolutionStillPossible(vector<Point> visitedPoints, Point destPoint, Point currPoint); //Check if a solution can still be found
