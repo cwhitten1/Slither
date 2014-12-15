@@ -18,7 +18,7 @@ To execute the program:
 Data File Format:
 
 The file should contain the data listed within the lines below :
-3 x 3 
+3 x 3
 377
 727
 773
