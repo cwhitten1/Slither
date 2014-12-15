@@ -35,6 +35,12 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="B1.txt" />
+		<Unit filename="B2.txt" />
+		<Unit filename="B3.txt" />
+		<Unit filename="B4.txt" />
+		<Unit filename="B5.txt" />
+		<Unit filename="Prac2.txt" />
 		<Unit filename="PracBoard.txt" />
 		<Unit filename="include/ArrayList.h" />
 		<Unit filename="include/Board.h" />
