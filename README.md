@@ -17,12 +17,10 @@ To execute the program:
 
 Data File Format:
 
-The file should contain the data listed within the lines below (do not type out those lines with hypens)
---------
+The file should contain the data listed within the lines below :
 3 x 3 
 377
 727
 773
----------
 
 The 7s represent blank squares with no value.
