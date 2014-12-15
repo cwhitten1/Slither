@@ -16,11 +16,5 @@ To execute the program:
 
 
 Data File Format:
-
-The file should contain the data listed within the lines below :
-3 x 3
-377
-727
-773
-
+See B1.txt for an example of a 5 x 5 grid.
 The 7s represent blank squares with no value.
